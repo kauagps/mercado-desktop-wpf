@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="mercado.View.EstoqueView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:mercado.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0, 0, 0, 20">
+                <TextBlock Text="Nome do Produto:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                <TextBox Width="250" Margin="0, 0, 10, 0"
+                         Text="{Binding NovoProduto.Nome, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Nome do produto">
+                </TextBox>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 0, 0, 20">
+                <TextBlock Text="Custo:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                <TextBox Width="80" Margin="0, 0, 10, 0"
+                         Text="{Binding NovoProduto.Custo}"
+                         ToolTip="Custo">
+                </TextBox>
+                <TextBlock Text="Lucro:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                <TextBox Width="80" Margin="0, 0, 10, 0"
+                         Text="{Binding NovoProduto.Lucro}"
+                         ToolTip="Lucro">
+                </TextBox>
+                <TextBlock Text="Valor de Venda:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                <TextBox Width="80" Margin="0, 0, 10, 0"
+                         Text="{Binding NovoProduto.ValorVenda}"
+                         ToolTip="Valor de Venda">
+                </TextBox>
+                <TextBlock Text="Quantidade Mínima:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                <TextBox Width="80" Margin="0, 0, 10, 0"
+                         Text="{Binding NovoProduto.QuantidadeMin}"
+                         ToolTip="Quantidade Mínima">
+                </TextBox>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 0, 0, 20">
+                <CheckBox Content="Fracionado" Margin="0, 0, 10, 0" 
+                          IsChecked="{Binding NovoProduto.Fracionado}">
+                </CheckBox>
+                <CheckBox Content="Ativo" Margin="0, 0, 10, 0" 
+                          IsChecked="{Binding NovoProduto.Ativo}">
+                </CheckBox>
+            </StackPanel>
+            <Button Grid.Row="3" Content="Adicionar Produto" 
+                    Width="180" HorizontalAlignment="Right"
+                    Command="{Binding AdicionarProdutoCommand}"></Button>
+        </Grid>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="True" IsReadOnly="True"></DataGrid>
+    </Grid>
+</UserControl>
