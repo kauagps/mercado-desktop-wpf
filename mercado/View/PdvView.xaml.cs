@@ -16,7 +16,7 @@ namespace mercado.View
     /// <summary>
     /// Interação lógica para PdvView.xam
     /// </summary>
-    public partial class PdvView : Page
+    public partial class PdvView : UserControl
     {
         public PdvView()
         {
