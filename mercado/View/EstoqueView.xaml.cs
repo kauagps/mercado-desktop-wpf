@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace mercado.View
 {
     /// <summary>
@@ -22,5 +23,7 @@ namespace mercado.View
         {
             InitializeComponent();
         }
+
+
     }
 }

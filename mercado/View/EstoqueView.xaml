@@ -4,6 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:mercado.View"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:localBehaviors="clr-namespace:mercado.Behaviors" 
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
@@ -33,25 +35,41 @@
                     </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 0, 0, 20">
-                    <TextBlock Text="Custo:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                    <TextBlock Text="Custo: (R$)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox Width="80" Margin="0, 0, 10, 0"
                              Text="{Binding NovoProduto.Custo}"
                              ToolTip="Custo">
+                        <i:Interaction.Behaviors>
+                            <localBehaviors:ApenasNumerosBehavior>
+                            </localBehaviors:ApenasNumerosBehavior>
+                        </i:Interaction.Behaviors>
                     </TextBox>
-                    <TextBlock Text="Lucro:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                    <TextBlock Text="Lucro: (%)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox Width="80" Margin="0, 0, 10, 0"
                              Text="{Binding NovoProduto.Lucro}"
                              ToolTip="Lucro">
+                        <i:Interaction.Behaviors>
+                            <localBehaviors:ApenasNumerosBehavior>
+                            </localBehaviors:ApenasNumerosBehavior>
+                        </i:Interaction.Behaviors>
                     </TextBox>
-                    <TextBlock Text="Valor de Venda:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                    <TextBlock Text="Valor de Venda: (R$)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox Width="80" Margin="0, 0, 10, 0"
                              Text="{Binding NovoProduto.ValorVenda}"
                              ToolTip="Valor de Venda">
+                        <i:Interaction.Behaviors>
+                            <localBehaviors:ApenasNumerosBehavior>
+                            </localBehaviors:ApenasNumerosBehavior>
+                        </i:Interaction.Behaviors>
                     </TextBox>
                     <TextBlock Text="Quantidade Mínima:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox Width="80" Margin="0, 0, 10, 0"
                              Text="{Binding NovoProduto.QuantidadeMin}"
                              ToolTip="Quantidade Mínima">
+                        <i:Interaction.Behaviors>
+                            <localBehaviors:ApenasNumerosBehavior>
+                            </localBehaviors:ApenasNumerosBehavior>
+                        </i:Interaction.Behaviors>
                     </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0, 0, 0, 20">
