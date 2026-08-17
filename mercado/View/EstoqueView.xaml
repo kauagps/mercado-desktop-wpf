@@ -22,6 +22,7 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
 
@@ -62,27 +63,40 @@
                             </localBehaviors:ApenasNumerosBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
-                    <TextBlock Text="Quantidade Mínima:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
-                    <TextBox Width="80" Margin="0, 0, 10, 0"
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0, 0, 0, 20">
+                    <TextBlock Text="Quantidade Mínima no Estoque:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                    <TextBox Width="80"
+                             Tag="{Binding IsChecked, ElementName=chkFracionado}"
                              Text="{Binding NovoProduto.QuantidadeMin}"
+                             Margin="0, 0, 10, 0"
                              ToolTip="Quantidade Mínima">
                         <i:Interaction.Behaviors>
-                            <localBehaviors:ApenasNumerosBehavior>
-                            </localBehaviors:ApenasNumerosBehavior>
+                            <localBehaviors:NumeroFracionadoBehavior />
                         </i:Interaction.Behaviors>
                     </TextBox>
-                </StackPanel>
-                <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0, 0, 0, 20">
-                    <CheckBox Content="Fracionado" Margin="0, 0, 10, 0" 
-                              IsChecked="{Binding NovoProduto.Fracionado}">
+                    <CheckBox x:Name="chkFracionado"
+                              Content="Venda Fracionada (Ex: Kg)" 
+                              IsChecked="{Binding NovoProduto.Fracionado, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0, 0, 10, 0" 
+                              VerticalAlignment="Center">
                     </CheckBox>
-                    <CheckBox Content="Ativo" Margin="0, 0, 10, 0" 
+                </StackPanel>
+                <Grid Grid.Row="4" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <CheckBox Content="Produto Ativo" Margin="0, 0, 30, 0" 
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"
                               IsChecked="{Binding NovoProduto.Ativo}">
                     </CheckBox>
-                </StackPanel>
-                <Button Grid.Row="5" Content="Adicionar Produto" 
-                        Width="180" HorizontalAlignment="Right"
-                        Command="{Binding AdicionarProdutoCommand}"></Button>
+                    <Button Content="Adicionar Produto" Width="180" 
+                            HorizontalAlignment="Right"
+                            Command="{Binding AdicionarProdutoCommand}"></Button>
+                </Grid>
             </Grid>
         </Border>
 

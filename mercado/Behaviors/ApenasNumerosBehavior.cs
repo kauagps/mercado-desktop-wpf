@@ -48,7 +48,7 @@ namespace mercado.Behaviors
             if (e.DataObject.GetDataPresent(typeof(string)))
             {
                 string text = (string)e.DataObject.GetData(typeof(string));
-                Regex regex = new Regex("[^0-9]+");
+                Regex regex = new Regex("[^0-9.]+");
                 if (regex.IsMatch(text))
                 {
                     e.CancelCommand();
