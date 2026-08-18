@@ -6,6 +6,7 @@ using mercado.Service;
 using mercado.Model;
 using System.Windows.Input;
 using System.ComponentModel;
+using System.Windows;
 
 namespace mercado.ViewModel
 {
@@ -49,6 +50,19 @@ namespace mercado.ViewModel
 
         private void SalvarNovoProduto()
         {
+            if(string.IsNullOrWhiteSpace(NovoProduto.Nome) || 
+                NovoProduto.Custo < 0 ||
+                NovoProduto.Lucro < 0)
+            {
+                MessageBox.Show(
+                    "Por Favor, preencha Nome, Custo e Lucro corretamente.",
+                    "Campos Obrigatórios",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
             _produtoService.AdicionarProduto(NovoProduto);
 
             ProdutosLista.Add(NovoProduto);
