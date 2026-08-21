@@ -28,5 +28,25 @@ namespace mercado.View
         {
             txtQuantidadeMin.Text = "0";
         }
+
+        private void CalcularPrecoIdeal_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (txtCusto == null || txtLucro == null || tbPrecoIdeal == null) return;
+
+            string textoCusto = txtCusto.Text.Replace('.', ',');
+            string textoLucro = txtLucro.Text.Replace('.', ',');
+
+            if (double.TryParse(textoCusto, out double custo) && double.TryParse(textoLucro, out double lucro))
+            {
+                double precoIdeal = custo + (custo * (lucro / 100));
+                tbPrecoIdeal.Text = $"Valor recomendado: (R$) {precoIdeal:N2}";
+
+            }
+            else
+            {
+                tbPrecoIdeal.Text = "Valor recomendado: (R$) 0,00";
+
+            }
+        }
     }
 }

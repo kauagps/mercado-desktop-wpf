@@ -37,8 +37,11 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 0, 0, 20">
                     <TextBlock Text="Custo: (R$)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
-                    <TextBox Width="80" Margin="0, 0, 10, 0"
+                    <TextBox x:Name="txtCusto"
+                             Width="80" 
+                             Margin="0, 0, 10, 0"
                              Text="{Binding NovoProduto.Custo}"
+                             TextChanged="CalcularPrecoIdeal_TextChanged"
                              ToolTip="Custo">
                         <i:Interaction.Behaviors>
                             <localBehaviors:ApenasNumerosBehavior>
@@ -46,8 +49,11 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
                     <TextBlock Text="Lucro: (%)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
-                    <TextBox Width="80" Margin="0, 0, 10, 0"
+                    <TextBox x:Name="txtLucro"
+                             Width="80" 
+                             Margin="0, 0, 10, 0"
                              Text="{Binding NovoProduto.Lucro}"
+                             TextChanged="CalcularPrecoIdeal_TextChanged"
                              ToolTip="Lucro">
                         <i:Interaction.Behaviors>
                             <localBehaviors:ApenasNumerosBehavior>
@@ -63,6 +69,12 @@
                             </localBehaviors:ApenasNumerosBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
+                    <TextBlock x:Name="tbPrecoIdeal"
+                        Text="Valor recomendado: (R$) 0,00" 
+                        FontWeight="Bold" 
+                        Foreground="Green" 
+                        VerticalAlignment="Center" 
+                        Margin="15, 0, 0, 0"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0, 0, 0, 20">
                     <TextBlock Text="Quantidade Mínima no Estoque:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
