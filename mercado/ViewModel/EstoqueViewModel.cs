@@ -50,7 +50,12 @@ namespace mercado.ViewModel
 
         private void SalvarNovoProduto()
         {
-            if(string.IsNullOrWhiteSpace(NovoProduto.Nome) || 
+            NovoProduto.Custo = Math.Round(NovoProduto.Custo,2);
+            NovoProduto.Lucro = Math.Round(NovoProduto.Lucro,2);
+            NovoProduto.ValorVenda = Math.Round(NovoProduto.ValorVenda,2);
+            NovoProduto.QuantidadeMin = Math.Round(NovoProduto.QuantidadeMin,2);
+
+            if (string.IsNullOrWhiteSpace(NovoProduto.Nome) || 
                 NovoProduto.Custo < 0 ||
                 NovoProduto.Lucro < 0)
             {

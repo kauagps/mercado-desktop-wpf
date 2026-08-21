@@ -40,7 +40,7 @@
                     <TextBox x:Name="txtCusto"
                              Width="80" 
                              Margin="0, 0, 10, 0"
-                             Text="{Binding NovoProduto.Custo}"
+                             Text="{Binding NovoProduto.Custo, StringFormat={}{0:N2}}"
                              TextChanged="CalcularPrecoIdeal_TextChanged"
                              ToolTip="Custo">
                         <i:Interaction.Behaviors>
@@ -52,7 +52,7 @@
                     <TextBox x:Name="txtLucro"
                              Width="80" 
                              Margin="0, 0, 10, 0"
-                             Text="{Binding NovoProduto.Lucro}"
+                             Text="{Binding NovoProduto.Lucro, StringFormat={}{0:N2}}"
                              TextChanged="CalcularPrecoIdeal_TextChanged"
                              ToolTip="Lucro">
                         <i:Interaction.Behaviors>
@@ -62,7 +62,7 @@
                     </TextBox>
                     <TextBlock Text="Valor de Venda: (R$)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox Width="80" Margin="0, 0, 10, 0"
-                             Text="{Binding NovoProduto.ValorVenda}"
+                             Text="{Binding NovoProduto.ValorVenda, StringFormat={}{0:N2}}"
                              ToolTip="Valor de Venda">
                         <i:Interaction.Behaviors>
                             <localBehaviors:ApenasNumerosBehavior>
