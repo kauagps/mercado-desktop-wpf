@@ -37,9 +37,11 @@ namespace mercado.ViewModel
         {
             if (obj is Produto produtoSelecionado)
             {
-                var janelaEdicao = new View.EditarProdutoWindow();
+                var janelaEdicao = new View.EditarProdutoWindow(produtoSelecionado);
 
                 janelaEdicao.ShowDialog();
+
+                CarregarProdutos();
             }
         }
 

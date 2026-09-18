@@ -27,5 +27,11 @@ namespace mercado.Service
             _context.Produtos.Add(novoProduto);
             _context.SaveChanges();
         }
+
+        public void AtualizarProduto(Produto produto)
+        {
+            _context.Produtos.Update(produto);
+            _context.SaveChanges();
+        }
     }
 }

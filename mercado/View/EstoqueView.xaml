@@ -119,6 +119,7 @@
 
                 <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*" />
                 <DataGridTextColumn Header="Custo (R$)" Binding="{Binding Custo, StringFormat={}{0:N2}}" Width="130" />
+                <DataGridTextColumn Header="Lucro (R$)" Binding="{Binding Lucro, StringFormat={}{0:N2}}" Width="130" />
                 <DataGridTextColumn Header="Venda (R$)" Binding="{Binding ValorVenda, StringFormat={}{0:N2}}" Width="130" />
                 <DataGridTextColumn Header="Qtd. Mínima" Binding="{Binding QuantidadeMin}" Width="130" />
                 <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Ativo}" Width="60" />
