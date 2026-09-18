@@ -14,7 +14,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        
+        <!--=========================================================================================================================-->
+        <!-- CONTAINER Cadastrar PRODUTOS -->
+        <!--==============================-->
         <Border Grid.Row="0" Background="LightGray" CornerRadius="5" Padding="10" Margin="0, 0, 0, 20">
             <Grid>
                 <Grid.RowDefinitions>
@@ -24,10 +27,12 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-
-
+    
+                
+                <!--Titulo-->
                 <TextBlock Grid.Row="0" Text="Cadastrar Produto" FontSize="16" FontWeight="Bold" Margin="0, 0, 0, 10"/>
                 
+                <!--Nome do Produto-->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 0, 0, 20">
                     <TextBlock Text="* Nome do Produto:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox Width="250" Margin="0, 0, 10, 0"
@@ -35,7 +40,11 @@
                              ToolTip="Nome do produto">
                     </TextBox>
                 </StackPanel>
+                
+                <!--Custo, Lucro e Valor de Venda do Produto-->
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 0, 0, 20">
+                    
+                    <!-- Custo -->
                     <TextBlock Text="Custo: (R$)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox x:Name="txtCusto"
                              Width="80" 
@@ -48,6 +57,8 @@
                             </localBehaviors:ApenasNumerosBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
+                    
+                    <!--Lucro-->
                     <TextBlock Text="Lucro: (%)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox x:Name="txtLucro"
                              Width="80" 
@@ -60,6 +71,8 @@
                             </localBehaviors:ApenasNumerosBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
+                    
+                    <!--Valor de Venda-->
                     <TextBlock Text="Valor de Venda: (R$)" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox Width="80" Margin="0, 0, 10, 0"
                              Text="{Binding NovoProduto.ValorVenda, StringFormat={}{0:N2}}"
@@ -76,7 +89,11 @@
                         VerticalAlignment="Center" 
                         Margin="15, 0, 0, 0"/>
                 </StackPanel>
+                
+                <!--Quantidade Minima e Venda Fracionada do Produto-->
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0, 0, 0, 20">
+
+                    <!--Quantidade Minima-->
                     <TextBlock Text="Quantidade Mínima no Estoque:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     <TextBox x:Name="txtQuantidadeMin"
                              Width="80"
@@ -88,6 +105,21 @@
                             <localBehaviors:NumeroFracionadoBehavior />
                         </i:Interaction.Behaviors>
                     </TextBox>
+
+                    <!--Quantidade Atual-->
+                    <TextBlock Text="Quantidade Atual no Estoque:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                    <TextBox x:Name="txtQuantidadeAtual"
+                             Width="80"
+                             Tag="{Binding IsChecked, ElementName=chkFracionado}"
+                             Text="{Binding NovoProduto.QuantidadeAtual}"
+                             Margin="0, 0, 10, 0"
+                             ToolTip="Quantidade Atual">
+                        <i:Interaction.Behaviors>
+                            <localBehaviors:NumeroFracionadoBehavior />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+
+                    <!--Fracionado-->
                     <CheckBox x:Name="chkFracionado"
                               Click="chkFracionado_Click"
                               Content="Venda Fracionada (Ex: Kg)" 
@@ -96,17 +128,22 @@
                               VerticalAlignment="Center">
                     </CheckBox>
                 </StackPanel>
+                
+                <!--Produto Ativo e Botão Adicionar Produto-->
                 <Grid Grid.Row="4" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     
+                    <!--Product Ativo Checkbox-->
                     <CheckBox Content="Produto Ativo" Margin="0, 0, 30, 0" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Center"
                               IsChecked="{Binding NovoProduto.Ativo}">
                     </CheckBox>
+                    
+                    <!--Botao Adicionar Produto-->
                     <Button Content="Adicionar Produto" Width="180" 
                             HorizontalAlignment="Right"
                             Command="{Binding AdicionarProdutoCommand}"></Button>
@@ -114,25 +151,35 @@
             </Grid>
         </Border>
 
+        <!--======================================================================================================================================-->
+        <!-- CONTAINER TABELA DE PRODUTOS -->
+        <!--==============================-->
         <DataGrid Grid.Row="1" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0, 20, 0, 0">
             <DataGrid.Columns>
-
+                
+                <!--Colunas Nome, Custo, Lucro, Valor de Venda, Quantidade Minima e Ativo-->
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
                 <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*" />
                 <DataGridTextColumn Header="Custo (R$)" Binding="{Binding Custo, StringFormat={}{0:N2}}" Width="130" />
                 <DataGridTextColumn Header="Lucro (R$)" Binding="{Binding Lucro, StringFormat={}{0:N2}}" Width="130" />
                 <DataGridTextColumn Header="Venda (R$)" Binding="{Binding ValorVenda, StringFormat={}{0:N2}}" Width="130" />
                 <DataGridTextColumn Header="Qtd. Mínima" Binding="{Binding QuantidadeMin}" Width="130" />
+                <DataGridTextColumn Header="Qtd. Atual" Binding="{Binding QuantidadeAtual}" Width="130" />
                 <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Ativo}" Width="60" />
 
                 <DataGridTemplateColumn Header="Ações" Width="300">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
+                            
+                            <!--Botoes-->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
+                                <!--Editar-->
                                 <Button Content="Editar" Width="70" Margin="2" Background="LightBlue"
                                 Command="{Binding DataContext.EditarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                 CommandParameter="{Binding}" />
 
+                                <!--Inativar-->
                                 <Button Content="Inativar" Width="80" Margin="2" Background="LightYellow" Foreground="Gray"
                                 Command="{Binding DataContext.InativarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                 CommandParameter="{Binding}"
@@ -150,7 +197,8 @@
                                         </Style>
                                     </Button.Style>
                                 </Button>
-
+    
+                                <!--Excluir-->
                                 <Button Content="Excluir" Width="75" Margin="2" Background="LightCoral"
                                 Command="{Binding DataContext.ExcluirProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                 CommandParameter="{Binding}" />

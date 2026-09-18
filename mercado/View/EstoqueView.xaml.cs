@@ -27,6 +27,8 @@ namespace mercado.View
         private void chkFracionado_Click(object sender, RoutedEventArgs e)
         {
             txtQuantidadeMin.Text = "0";
+            txtQuantidadeAtual.Text = "0";
+
         }
 
         private void CalcularPrecoIdeal_TextChanged(object sender, TextChangedEventArgs e)

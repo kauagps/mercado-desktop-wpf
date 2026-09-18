@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mercado.Data;
 
@@ -10,9 +11,11 @@ using mercado.Data;
 namespace mercado.Migrations
 {
     [DbContext(typeof(MercadoContext))]
-    partial class MercadoContextModelSnapshot : ModelSnapshot
+    [Migration("20260918210353_Quantida-produtos")]
+    partial class Quantidaprodutos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,7 @@ namespace mercado.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("QuantidadeAtual")
+                    b.Property<decimal>("Quantidade")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("QuantidadeMin")

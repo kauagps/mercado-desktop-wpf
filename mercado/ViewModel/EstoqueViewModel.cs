@@ -78,7 +78,18 @@ namespace mercado.ViewModel
         {
             if (obj is Produto produtoSelecionado)
             {
-                MessageBox.Show($"Voce clicou em excluir o produto: {produtoSelecionado.Nome}");
+                var resposta = MessageBox.Show(
+                    $"Tem certeza que deseja excluir o produto: {produtoSelecionado.Nome}?",
+                    "Confirmar Exclusão",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (resposta == MessageBoxResult.Yes)
+                {
+                    _produtoService.ExcluirProduto(produtoSelecionado);
+                    ProdutosLista.Remove(produtoSelecionado);
+                    MessageBox.Show($"Produto {produtoSelecionado.Nome} excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
@@ -109,6 +120,7 @@ namespace mercado.ViewModel
             NovoProduto.Lucro = Math.Round(NovoProduto.Lucro,2);
             NovoProduto.ValorVenda = Math.Round(NovoProduto.ValorVenda,2);
             NovoProduto.QuantidadeMin = Math.Round(NovoProduto.QuantidadeMin,2);
+            NovoProduto.QuantidadeAtual = Math.Round(NovoProduto.QuantidadeAtual,2);
 
             if (string.IsNullOrWhiteSpace(NovoProduto.Nome) || 
                 NovoProduto.Custo < 0 ||

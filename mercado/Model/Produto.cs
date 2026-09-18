@@ -17,7 +17,11 @@ namespace mercado.Model
         [Column(TypeName = "decimal(18,2)")]
         public decimal ValorVenda { get; set; }
         [Column(TypeName = "decimal(18,2)")]
+        
+        public decimal QuantidadeAtual { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal QuantidadeMin { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
 
         public bool Fracionado { get; set; }
         public bool Ativo { get; set; } = true;

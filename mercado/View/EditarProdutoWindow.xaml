@@ -9,12 +9,20 @@
         mc:Ignorable="d"
         Title="Editar Produto" Height="550" Width="450">
     <Grid Margin="20">
+        
+        <!--========================================================================================================-->
+        <!--Formulario de Edição de Produto-->
+        <!--===============================-->
         <StackPanel>
+            
+            <!--Titulo-->
             <TextBlock Text="Editar Produto" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
             
+            <!--Nome do Produto-->
             <TextBlock Text="Nome do Produto:"/>
             <TextBox Text="{Binding Nome}" Margin="0,0,0,10" Padding="2"/>
-
+        
+            <!--Custo-->
             <TextBlock Text="Custo (R$):"/>
             <TextBox x:Name="txtCusto" 
                      Text="{Binding Custo, StringFormat={}{0:N2}}" 
@@ -27,6 +35,7 @@
                 </i:Interaction.Behaviors>
             </TextBox>
 
+            <!--Lucro-->
             <TextBlock Text="Lucro (%):"/>
             <TextBox x:Name="txtLucro" 
                      Text="{Binding Lucro, StringFormat={}{0:N2}}" 
@@ -46,6 +55,7 @@
             VerticalAlignment="Center" 
             Margin="0, 0, 0, 10"/>
 
+            <!--Valor de Venda-->
             <TextBlock Text="Valor de Venda (R$):"/>
             <TextBox Text="{Binding ValorVenda, StringFormat={}{0:N2}}" Margin="0,0,0,10" Padding="2">
                 <i:Interaction.Behaviors>
@@ -54,6 +64,7 @@
                 </i:Interaction.Behaviors>
             </TextBox>
 
+            <!--Quantidade Minima-->
             <TextBlock Text="Quantidade Minima:"/>
             <TextBox x:Name="txtQuantidadeMin" 
                      Tag="{Binding IsChecked, ElementName=chkFracionado}"
@@ -64,7 +75,20 @@
                     <localBehaviors:NumeroFracionadoBehavior />
                 </i:Interaction.Behaviors>
             </TextBox>
+            
+            <!--Quantidade Atual-->
+            <TextBlock Text="Quantidade Atual:"/>
+            <TextBox x:Name="txtQuantidadeAtual" 
+                     Tag="{Binding IsChecked, ElementName=chkFracionado}"
+                     Text="{Binding QuantidadeAtual}" 
+                     Margin="0,0,0,10" 
+                     Padding="2">
+                <i:Interaction.Behaviors>
+                    <localBehaviors:NumeroFracionadoBehavior />
+                </i:Interaction.Behaviors>
+            </TextBox>
 
+            <!--Fracionado-->
             <CheckBox x:Name="chkFracionado"
               Click="chkFracionado_Click"
               Content="Venda Fracionada (Ex: Kg)" 
@@ -73,12 +97,15 @@
               VerticalAlignment="Center">
             </CheckBox>
 
+            <!--Ativo-->
             <CheckBox Content="Produto Ativo" Margin="0, 0, 30, 0" 
               HorizontalAlignment="Left"
               VerticalAlignment="Center"
               IsChecked="{Binding Ativo}">
             </CheckBox>
 
+            
+            <!--Cancelar ou Salvar Alterações-->
             <Grid HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

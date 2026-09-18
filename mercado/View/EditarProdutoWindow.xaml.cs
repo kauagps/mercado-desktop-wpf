@@ -36,6 +36,7 @@ namespace mercado.View
                 Lucro = produto.Lucro,
                 ValorVenda = produto.ValorVenda,
                 QuantidadeMin = produto.QuantidadeMin,
+                QuantidadeAtual = produto.QuantidadeAtual,
                 Fracionado = produto.Fracionado,
                 Ativo = produto.Ativo
             };
@@ -56,6 +57,7 @@ namespace mercado.View
             _produtoOriginal.Lucro = _produtoClone.Lucro;
             _produtoOriginal.ValorVenda = _produtoClone.ValorVenda;
             _produtoOriginal.QuantidadeMin = _produtoClone.QuantidadeMin;
+            _produtoOriginal.QuantidadeAtual = _produtoClone.QuantidadeAtual;
             _produtoOriginal.Fracionado = _produtoClone.Fracionado;
             _produtoOriginal.Ativo = _produtoClone.Ativo;
 

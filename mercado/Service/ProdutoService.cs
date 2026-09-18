@@ -33,5 +33,11 @@ namespace mercado.Service
             _context.Produtos.Update(produto);
             _context.SaveChanges();
         }
+
+        internal void ExcluirProduto(Produto produto)
+        {
+            _context.Produtos.Remove(produto);
+            _context.SaveChanges();
+        }
     }
 }
