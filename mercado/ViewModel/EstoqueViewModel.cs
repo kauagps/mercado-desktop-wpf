@@ -49,8 +49,29 @@ namespace mercado.ViewModel
         {
             if (obj is Produto produtoSelecionado)
             {
-                MessageBox.Show($"Você clicou em Inativar o produto: {produtoSelecionado.Nome}");
+                var resposta = MessageBox.Show(
+                    $"Tem certeza que deseja inativar o produto: {produtoSelecionado.Nome}?",
+                    "Confirmar Inativação",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (resposta == MessageBoxResult.Yes)
+                {
+                    if (produtoSelecionado.Ativo == false)
+                    {
+                        MessageBox.Show($"O produto {produtoSelecionado.Nome} já está inativo.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                    produtoSelecionado.Ativo = false;
+                    _produtoService.AtualizarProduto(produtoSelecionado);
+
+                    CarregarProdutos();
+
+                    MessageBox.Show($"Produto {produtoSelecionado.Nome} inativado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
+
+            
         }
 
         private void ExcluirProduto(object? obj)

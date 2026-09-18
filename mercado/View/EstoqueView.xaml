@@ -135,7 +135,21 @@
 
                                 <Button Content="Inativar" Width="80" Margin="2" Background="LightYellow" Foreground="Gray"
                                 Command="{Binding DataContext.InativarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                CommandParameter="{Binding}" />
+                                CommandParameter="{Binding}"
+                                ToolTipService.ShowOnDisabled="True">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="IsEnabled" Value="{Binding Ativo}"/>
+                                            <Setter Property="ToolTip" Value="Inativar este Produto"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Ativo}" Value="False">
+                                                    <Setter Property="ToolTip" Value="Produto já está inativo"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
 
                                 <Button Content="Excluir" Width="75" Margin="2" Background="LightCoral"
                                 Command="{Binding DataContext.ExcluirProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
