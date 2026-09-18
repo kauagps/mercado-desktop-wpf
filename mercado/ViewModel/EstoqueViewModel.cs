@@ -13,30 +13,62 @@ namespace mercado.ViewModel
     public class EstoqueViewModel : INotifyPropertyChanged
     {
         private readonly ProdutoService _produtoService;
-        private ObservableCollection<Produto>? _produtosLista;
-        private Produto? _novoProduto;
-
+        private ObservableCollection<Produto> _produtosLista = new ObservableCollection<Produto>();
+        private Produto _novoProduto = new Produto();
 
         public ObservableCollection<Produto> ProdutosLista
         {
-            get { return _produtosLista!; }
+            get { return _produtosLista; }
             set { _produtosLista = value; onPropertyChanged(nameof(ProdutosLista)); }
         }
 
         public Produto NovoProduto
         {
-            get { return _novoProduto!; }
+            get { return _novoProduto; }
             set { _novoProduto = value; onPropertyChanged(nameof(NovoProduto)); }
         }
 
         public ICommand AdicionarProdutoCommand { get; set; }
+        public ICommand EditarProdutoCommand { get; set; }
+        public ICommand InativarProdutoCommand { get; set; }
+        public ICommand ExcluirProdutoCommand { get; set; }
+
+        private void AbrirTelaEdicao(object? obj)
+        {
+            if (obj is Produto produtoSelecionado)
+            {
+                var janelaEdicao = new View.EditarProdutoWindow();
+
+                janelaEdicao.ShowDialog();
+            }
+        }
+
+        private void InativarProduto(object? obj)
+        {
+            if (obj is Produto produtoSelecionado)
+            {
+                MessageBox.Show($"Você clicou em Inativar o produto: {produtoSelecionado.Nome}");
+            }
+        }
+
+        private void ExcluirProduto(object? obj)
+        {
+            if (obj is Produto produtoSelecionado)
+            {
+                MessageBox.Show($"Voce clicou em excluir o produto: {produtoSelecionado.Nome}");
+            }
+        }
 
         public EstoqueViewModel()
         {
             _produtoService = new ProdutoService();
             NovoProduto = new Produto();
+            ProdutosLista = new ObservableCollection<Produto>();
 
-            AdicionarProdutoCommand = new RelayCommand(SalvarNovoProduto);
+            AdicionarProdutoCommand = new RelayCommand(_ => SalvarNovoProduto());
+            EditarProdutoCommand = new RelayCommand(AbrirTelaEdicao);
+            InativarProdutoCommand = new RelayCommand(InativarProduto);
+            ExcluirProdutoCommand = new RelayCommand(ExcluirProduto);
 
             CarregarProdutos();
         }

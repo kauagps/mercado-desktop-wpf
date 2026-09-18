@@ -7,21 +7,23 @@ namespace mercado.ViewModel
 {
     public class RelayCommand : ICommand
     {
-        private Action _execute;
+        private readonly Action<object?> _execute;
+        private readonly Func<object?, bool>? _canExecute;
 
-        public RelayCommand(Action execute)
+        public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute = null)
         {
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
 
         public bool CanExecute(object ? parameter)
         {
-            return true;
+            return _canExecute?.Invoke(parameter) ?? true;
         }
 
         public void Execute(object ? parameter)
         {
-            _execute();
+            _execute(parameter);
         }
 
         public event EventHandler ? CanExecuteChanged

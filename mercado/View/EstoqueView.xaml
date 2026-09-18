@@ -114,6 +114,38 @@
             </Grid>
         </Border>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="True" IsReadOnly="True"></DataGrid>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0, 20, 0, 0">
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*" />
+                <DataGridTextColumn Header="Custo (R$)" Binding="{Binding Custo, StringFormat={}{0:N2}}" Width="130" />
+                <DataGridTextColumn Header="Venda (R$)" Binding="{Binding ValorVenda, StringFormat={}{0:N2}}" Width="130" />
+                <DataGridTextColumn Header="Qtd. Mínima" Binding="{Binding QuantidadeMin}" Width="130" />
+                <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Ativo}" Width="60" />
+
+                <DataGridTemplateColumn Header="Ações" Width="300">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                                <Button Content="Editar" Width="70" Margin="2" Background="LightBlue"
+                                Command="{Binding DataContext.EditarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                CommandParameter="{Binding}" />
+
+                                <Button Content="Inativar" Width="80" Margin="2" Background="LightYellow" Foreground="Gray"
+                                Command="{Binding DataContext.InativarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                CommandParameter="{Binding}" />
+
+                                <Button Content="Excluir" Width="75" Margin="2" Background="LightCoral"
+                                Command="{Binding DataContext.ExcluirProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                CommandParameter="{Binding}" />
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

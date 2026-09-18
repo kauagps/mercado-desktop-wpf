@@ -34,8 +34,8 @@ namespace mercado.ViewModel
             EstoqueVM = new EstoqueViewModel();
             PdvVM = new PdvViewModel();
 
-            NavEstoqueCommand = new RelayCommand(NavegarParaEstoque);
-            NavPdvCommand = new RelayCommand(NavegarParaPdv);
+            NavEstoqueCommand = new RelayCommand(_ => NavegarParaEstoque());
+            NavPdvCommand = new RelayCommand(_ => NavegarParaPdv());
 
             CurrentViewModel = EstoqueVM;
         }
