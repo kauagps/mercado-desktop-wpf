@@ -53,6 +53,20 @@ namespace mercado.View
 
         private void btnSalvar_Click(object sender, RoutedEventArgs e)
         {
+
+            if (string.IsNullOrWhiteSpace(_produtoClone.Nome) ||
+                _produtoClone.Custo < 0 ||
+                _produtoClone.Lucro < 0)
+            {
+                MessageBox.Show(
+                    "Por Favor, preencha Nome, Custo e Lucro corretamente.",
+                    "Campos Obrigatórios",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
             _produtoOriginal.Nome = _produtoClone.Nome;
             _produtoOriginal.CodigoBarras = _produtoClone.CodigoBarras;
             _produtoOriginal.Custo = _produtoClone.Custo;
