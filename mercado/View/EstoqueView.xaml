@@ -156,13 +156,23 @@
         <!--==============================-->
         <Grid Grid.Row="1" Margin="0, 20, 0, 0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 
             </Grid.RowDefinitions>
+            
+            <!--Campo Buscar Produto-->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 0, 10">
+                <TextBlock Text="Buscar Produto: " VerticalAlignment="Center" FontWeight="SemiBold" Margin="0, 0, 10, 0"/>
+
+                <TextBox Width="250" Padding="5"
+                         Text="{Binding TextoBusca, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Digite o nome do produto para buscar"/>
+            </StackPanel>
 
             <!--Tabela de Produtos-->
-            <DataGrid Grid.Row="0" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid Grid.Row="1" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
 
                     <!--Colunas Nome, Custo, Lucro, Valor de Venda, Quantidade Minima e Ativo-->
@@ -220,7 +230,7 @@
             </DataGrid>
             
             <!--Rodape com paginação-->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 15, 0, 0">
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 15, 0, 0">
 
                 <TextBlock Text="{Binding TotalItens, StringFormat='{}Total no banco: {0} itens'}" 
                    VerticalAlignment="Center" 

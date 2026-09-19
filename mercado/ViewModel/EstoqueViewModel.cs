@@ -28,6 +28,23 @@ namespace mercado.ViewModel
             set { _novoProduto = value; onPropertyChanged(nameof(NovoProduto)); }
         }
 
+        // --- Variaveis Buscar --------------
+        private string _textoBusca = string.Empty;
+        public string TextoBusca
+        {
+            get { return _textoBusca; }
+            set
+            {
+                if (_textoBusca != value)
+                {
+                    _textoBusca = value;
+                    PaginaAtual = 1;
+                    CarregarProdutos();
+                    onPropertyChanged(nameof(TextoBusca));
+                }
+            }
+        }
+
 
         //--- Variaveis de controle da paginação --------------------
 
@@ -181,6 +198,13 @@ namespace mercado.ViewModel
         private void CarregarProdutos()
         {
             var listaDoBanco = _produtoService.ListarTodos();
+
+            if (!string.IsNullOrWhiteSpace(TextoBusca))
+            {
+                listaDoBanco = listaDoBanco
+                    .Where(p => p.Nome.Contains(TextoBusca, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
 
             TotalItens = listaDoBanco.Count;
 
