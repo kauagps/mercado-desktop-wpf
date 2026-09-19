@@ -232,6 +232,8 @@ namespace mercado.ViewModel
 
             NovoProduto = new Produto();
 
+            MessageBox.Show($"Produto {NovoProduto.Nome} adicionado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
             CarregarProdutos();
         }
 
