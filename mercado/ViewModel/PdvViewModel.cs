@@ -13,11 +13,23 @@ namespace mercado.ViewModel
 {
     public class PdvViewModel : INotifyPropertyChanged
     {
+
+        private VendaService _vendaService;
+
         private ProdutoService _produtoService;
 
         public ObservableCollection<ItemVenda> Carrinho { get; set; } = new ObservableCollection<ItemVenda>();
 
         private decimal _totalCompra;
+
+        public PdvViewModel()
+        {
+            _produtoService = new ProdutoService();
+            _vendaService = new VendaService();
+
+        }
+
+
         public decimal TotalCompra
         {
             get { return _totalCompra;  }
@@ -31,10 +43,39 @@ namespace mercado.ViewModel
             set { _quantidadeAtual = value; OnPropertyChanged(nameof(QuantidadeAtual)); }
         }
 
-        public PdvViewModel()
+        public void ConcluirVenda(System.Collections.Generic.List<PagamentoVenda> pagamentosRealizados)
         {
-            _produtoService = new ProdutoService();
+
+            var novaVenda = new Venda
+            {
+                ValorTotal = TotalCompra,
+                DataVenda = System.DateTime.Now,
+                Pagamentos = pagamentosRealizados,
+                Itens = Carrinho.Select(c => new ItemVenda
+                {
+                    ProdutoId = c.ProdutoId,
+                    Quantidade = c.Quantidade,
+                    ValorUnitario = c.ValorUnitario,
+                    Subtotal = c.Subtotal
+                }).ToList()
+            };
+
+            foreach (var item in novaVenda.Itens)
+            {
+                item.Produto = null;
+            }
+
+            _vendaService.SalvarVendaCompleta(novaVenda);
+
+            var reciboService = new ReciboService();
+            reciboService.GerarCupomTxt(novaVenda, Carrinho.ToList());
+
+            Carrinho.Clear();
+            QuantidadeAtual = 1;
+            CalcularTotal();
+            MessageBox.Show("Venda concluída com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
 
         public void BiparProduto(string codigoBarras)
         {

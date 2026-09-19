@@ -10,6 +10,10 @@ namespace mercado.Data
     {
         public DbSet<Produto> Produtos { get; set; }
 
+        public DbSet<Venda> Vendas { get; set; }
+        public DbSet<ItemVenda> ItensVenda { get; set; }
+        public DbSet<PagamentoVenda> PagamentosVenda { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=MercadoDB;Trusted_Connection=True;");
