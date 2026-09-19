@@ -39,5 +39,10 @@ namespace mercado.Service
             _context.Produtos.Remove(produto);
             _context.SaveChanges();
         }
+
+        public Produto? BuscarPorCodigo(string codigo)
+        {
+            return _context.Produtos.FirstOrDefault(p => p.CodigoBarras == codigo && p.Ativo);
+        }
     }
 }

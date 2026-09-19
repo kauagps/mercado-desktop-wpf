@@ -5,9 +5,55 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:mercado.View"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800">
+      Background="White">
 
-    <Grid>
-        
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="1" Margin="0,0,10,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="CUPOM FISCAL / CARRINHO" FontSize="18" FontWeight="Bold" Margin="10" Foreground="Gray"/>
+
+                <DataGrid Grid.Row="1" ItemsSource="{Binding Carrinho}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Produto" Binding="{Binding Produto.Nome}" Width="*" />
+                        <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="60" />
+                        <DataGridTextColumn Header="V. Unit. (R$)" Binding="{Binding ValorUnitario, StringFormat={}{0:N2}}" Width="100" />
+                        <DataGridTextColumn Header="Subtotal (R$)" Binding="{Binding SubTotal, StringFormat={}{0:N2}}" Width="100" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+        <Border Grid.Column="0" Margin="10,0,0,0" Background="#f8f9fa" CornerRadius="8" Padding="20">
+            <StackPanel>
+                <TextBlock Text="PONTO DE VENDA" FontSize="22" FontWeight="Black" Margin="0,0,0,20" Foreground="#2c3e50" />
+
+                <!-- O multiplicador de quantidade -->
+                <TextBlock Text="Quantidade:" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding QuantidadeAtual}" FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" Margin="0,0,0,15" Padding="5"/>
+
+                <!-- O CAMPO MÁGICO DO LEITOR -->
+                <TextBlock Text="Código de Barras:" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="txtCodigoBarras" FontSize="24" FontWeight="Bold" Margin="0,0,0,30" Padding="10" KeyDown="txtCodigoBarras_KeyDown" />
+
+                <!-- O Totalzão da Compra -->
+                <TextBlock Text="TOTAL DA COMPRA:" FontSize="18" FontWeight="Bold" Foreground="Gray" Margin="0,20,0,0"/>
+                <TextBlock Text="{Binding TotalCompra, StringFormat='{}R$ {0:N2}'}" FontSize="45" FontWeight="Black" Foreground="DarkGreen" Margin="0,0,0,30"/>
+
+                <!-- Botões de Ação -->
+                <Button Content="Finalizar Compra" Height="60" FontSize="20" FontWeight="Bold" Background="LightGreen"/>
+                <Button Content="Cancelar Venda" Height="40" FontSize="16" FontWeight="Bold" Background="LightCoral" Margin="0,10,0,0"/>
+            </StackPanel>
+        </Border>
+
+
     </Grid>
 </UserControl>

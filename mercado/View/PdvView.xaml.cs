@@ -1,4 +1,5 @@
-﻿using System;
+﻿using mercado.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +19,26 @@ namespace mercado.View
     /// </summary>
     public partial class PdvView : UserControl
     {
+        private PdvViewModel _viewModel;
+        
+        
         public PdvView()
         {
             InitializeComponent();
+            _viewModel = new PdvViewModel();
+            DataContext = _viewModel;
+
+            txtCodigoBarras.Focus();
+        }
+
+        private void txtCodigoBarras_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                _viewModel.BiparProduto(txtCodigoBarras.Text);
+                txtCodigoBarras.Clear();
+                txtCodigoBarras.Focus();
+            }
         }
     }
 }
