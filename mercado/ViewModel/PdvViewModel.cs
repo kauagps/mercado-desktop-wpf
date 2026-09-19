@@ -89,6 +89,15 @@ namespace mercado.ViewModel
                 return;
             }
 
+            if (!produto.Fracionado && QuantidadeAtual % 1 != 0)
+            {
+                MessageBox.Show($"O produto '{produto.Nome}' é vendido apenas por unidade inteira.\nNão é possível vender {QuantidadeAtual}.",
+                        "Quantidade Inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                QuantidadeAtual = 1; // Reseta o multiplicador por segurança
+                return;
+            }
+
             var novoItem = new ItemVenda
             {
                 ProdutoId = produto.Id,
