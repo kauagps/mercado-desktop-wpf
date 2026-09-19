@@ -8,7 +8,8 @@
         xmlns:viewmodels="clr-namespace:mercado.ViewModel"
         xmlns:views="clr-namespace:mercado.View"
         Style="{StaticResource MaterialDesignWindow}"
-        Title="Sistema Mercado" Height="600" Width="900">
+        Title="Sistema Mercado" Height="600" Width="900"
+        Background="#fcf8f2">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:EstoqueViewModel}">
             <views:EstoqueView />
