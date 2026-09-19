@@ -50,5 +50,19 @@ namespace mercado.View
 
             }
         }
+
+        private void txtCodigoBarras_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string codigo = txtCodigoBarras.Text.Trim();
+                if (!string.IsNullOrWhiteSpace(codigo))
+                {
+                    MessageBox.Show($"BIP! Código de barras lido: {codigo}", "Código de Barras", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    txtCodigoBarras.Focus();
+                }
+            }
+        }
     }
 }

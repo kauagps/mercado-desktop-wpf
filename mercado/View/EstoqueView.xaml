@@ -31,16 +31,36 @@
                 
                 <!--Titulo-->
                 <TextBlock Grid.Row="0" Text="Cadastrar Produto" FontSize="16" FontWeight="Bold" Margin="0, 0, 0, 10"/>
-                
-                <!--Nome do Produto-->
+
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 0, 0, 20">
-                    <TextBlock Text="* Nome do Produto:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
-                    <TextBox Width="250" Margin="0, 0, 10, 0"
-                             Text="{Binding NovoProduto.Nome, UpdateSourceTrigger=PropertyChanged}"
-                             ToolTip="Nome do produto">
-                    </TextBox>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0, 0, 0, 20">
+                            <TextBlock Text="* Nome do Produto:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                            <TextBox Width="250" Margin="0, 0, 10, 0"
+                                 Text="{Binding NovoProduto.Nome, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Nome do produto">
+                            </TextBox>
+                        </StackPanel>
+
+                        <!--Codigo de Barras-->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0, 0, 0, 20">
+                            <TextBlock Text="Código de Barras:" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                            <TextBox x:Name="txtCodigoBarras"
+                                 Width="250" Margin="0, 0, 10, 0"
+                                 Text="{Binding NovoProduto.CodigoBarras}"
+                                 KeyDown="txtCodigoBarras_KeyDown"
+                                 ToolTip="Código de Barras do produto">
+                            </TextBox>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
-                
+
+
                 <!--Custo, Lucro e Valor de Venda do Produto-->
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 0, 0, 20">
                     
@@ -176,7 +196,7 @@
                 <DataGrid.Columns>
 
                     <!--Colunas Nome, Custo, Lucro, Valor de Venda, Quantidade Minima e Ativo-->
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
+                    <DataGridTextColumn Header="Cod. Barras" Binding="{Binding CodigoBarras}" Width="60" />
                     <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*" />
                     <DataGridTextColumn Header="Custo (R$)" Binding="{Binding Custo, StringFormat={}{0:N2}}" Width="130" />
                     <DataGridTextColumn Header="Lucro (R$)" Binding="{Binding Lucro, StringFormat={}{0:N2}}" Width="130" />

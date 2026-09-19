@@ -8,7 +8,8 @@ namespace mercado.Model
     public class Produto
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
+        public string CodigoBarras { get; set; } = string.Empty;
+        public string Nome { get; set; } = string.Empty;
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Custo { get; set; }

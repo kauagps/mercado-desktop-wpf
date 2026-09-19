@@ -21,7 +21,14 @@
             <!--Nome do Produto-->
             <TextBlock Text="Nome do Produto:"/>
             <TextBox Text="{Binding Nome}" Margin="0,0,0,10" Padding="2"/>
-        
+            
+            <!--Codigo de Barras-->
+            <TextBlock Text="Código de Barras:"/>
+            <TextBox x:Name="txtCodigoBarras"
+                Text="{Binding CodigoBarras}" 
+                KeyDown="txtCodigoBarras_KeyDown"
+                Margin="0,0,0,10" Padding="2"/>
+
             <!--Custo-->
             <TextBlock Text="Custo (R$):"/>
             <TextBox x:Name="txtCusto" 
