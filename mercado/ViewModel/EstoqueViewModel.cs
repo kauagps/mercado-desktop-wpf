@@ -28,10 +28,79 @@ namespace mercado.ViewModel
             set { _novoProduto = value; onPropertyChanged(nameof(NovoProduto)); }
         }
 
+
+        //--- Variaveis de controle da paginação --------------------
+
+        private int _totalItens;
+        public int TotalItens
+        {
+            get { return _totalItens; }
+            set { _totalItens = value; onPropertyChanged(nameof(TotalItens)); }
+        }
+
+        // Variável para armazenar a página atual
+        private int _paginaAtual = 1;
+        public int PaginaAtual
+        {
+            get { return _paginaAtual; }
+            set { _paginaAtual = value; onPropertyChanged(nameof(PaginaAtual)); }
+        }
+
+        // Variável para armazenar o total de páginas
+        private int _totalPaginas = 1;
+        public int TotalPaginas
+        {
+            get { return _totalPaginas; }
+            set { _totalPaginas = value; onPropertyChanged(nameof(TotalPaginas)); }
+        }
+
+        // Opções para o número de itens por página
+        public ObservableCollection<int> OpcoesItensPorPagina { get; set; } = new ObservableCollection<int> { 5, 20, 50, 200, 500, 1000 };
+
+        private int _itensPorPagina = 5;
+        public int ItensPorPagina
+        {
+            get { return _itensPorPagina; }
+            set
+            {
+                if (_itensPorPagina != value)
+                {
+                    _itensPorPagina = value;
+                    PaginaAtual = 1;
+                    onPropertyChanged(nameof(ItensPorPagina));
+
+                    CarregarProdutos();
+                }
+                
+            }
+        }
+
+        public ICommand PaginaAnteriorCommand { get; set; }
+        public ICommand ProximaPaginaCommand { get; set; }
+
         public ICommand AdicionarProdutoCommand { get; set; }
         public ICommand EditarProdutoCommand { get; set; }
         public ICommand InativarProdutoCommand { get; set; }
         public ICommand ExcluirProdutoCommand { get; set; }
+
+        // ---- Metodos de controle da paginação ---------------------------------
+        private void PaginaAnterior(object? obj)
+        {
+            if (PaginaAtual > 1)
+            {
+                PaginaAtual--;
+                CarregarProdutos();
+            }
+        }
+
+        private void ProximaPagina(object? obj)
+        {
+            if (PaginaAtual < TotalPaginas)
+            {
+                PaginaAtual++;
+                CarregarProdutos();
+            }
+        }
 
         private void AbrirTelaEdicao(object? obj)
         {
@@ -87,7 +156,7 @@ namespace mercado.ViewModel
                 if (resposta == MessageBoxResult.Yes)
                 {
                     _produtoService.ExcluirProduto(produtoSelecionado);
-                    ProdutosLista.Remove(produtoSelecionado);
+                    CarregarProdutos();
                     MessageBox.Show($"Produto {produtoSelecionado.Nome} excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -103,6 +172,8 @@ namespace mercado.ViewModel
             EditarProdutoCommand = new RelayCommand(AbrirTelaEdicao);
             InativarProdutoCommand = new RelayCommand(InativarProduto);
             ExcluirProdutoCommand = new RelayCommand(ExcluirProduto);
+            PaginaAnteriorCommand = new RelayCommand(PaginaAnterior);
+            ProximaPaginaCommand = new RelayCommand(ProximaPagina);
 
             CarregarProdutos();
         }
@@ -111,7 +182,29 @@ namespace mercado.ViewModel
         {
             var listaDoBanco = _produtoService.ListarTodos();
 
-            ProdutosLista = new ObservableCollection<Produto>(listaDoBanco);
+            TotalItens = listaDoBanco.Count;
+
+            if (TotalItens == 0)
+            {
+                TotalPaginas = 1;
+                ProdutosLista = new ObservableCollection<Produto>();
+                return;
+            }
+
+            TotalPaginas = (int)Math.Ceiling((double)TotalItens / ItensPorPagina);
+
+            if (PaginaAtual > TotalPaginas)
+            {
+                PaginaAtual = TotalPaginas;
+            }
+
+            var itensPaginados = listaDoBanco
+                .OrderBy(p => p.Nome)
+                .Skip((PaginaAtual - 1) * ItensPorPagina)
+                .Take(ItensPorPagina)
+                .ToList();
+
+            ProdutosLista = new ObservableCollection<Produto>(itensPaginados);
         }
 
         private void SalvarNovoProduto()
@@ -137,9 +230,9 @@ namespace mercado.ViewModel
 
             _produtoService.AdicionarProduto(NovoProduto);
 
-            ProdutosLista.Add(NovoProduto);
-
             NovoProduto = new Produto();
+
+            CarregarProdutos();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

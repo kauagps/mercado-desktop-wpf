@@ -154,61 +154,93 @@
         <!--======================================================================================================================================-->
         <!-- CONTAINER TABELA DE PRODUTOS -->
         <!--==============================-->
-        <DataGrid Grid.Row="1" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0, 20, 0, 0">
-            <DataGrid.Columns>
+        <Grid Grid.Row="1" Margin="0, 20, 0, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
                 
-                <!--Colunas Nome, Custo, Lucro, Valor de Venda, Quantidade Minima e Ativo-->
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
-                <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*" />
-                <DataGridTextColumn Header="Custo (R$)" Binding="{Binding Custo, StringFormat={}{0:N2}}" Width="130" />
-                <DataGridTextColumn Header="Lucro (R$)" Binding="{Binding Lucro, StringFormat={}{0:N2}}" Width="130" />
-                <DataGridTextColumn Header="Venda (R$)" Binding="{Binding ValorVenda, StringFormat={}{0:N2}}" Width="130" />
-                <DataGridTextColumn Header="Qtd. Mínima" Binding="{Binding QuantidadeMin}" Width="130" />
-                <DataGridTextColumn Header="Qtd. Atual" Binding="{Binding QuantidadeAtual}" Width="130" />
-                <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Ativo}" Width="60" />
+            </Grid.RowDefinitions>
 
-                <DataGridTemplateColumn Header="Ações" Width="300">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            
-                            <!--Botoes-->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <!--Tabela de Produtos-->
+            <DataGrid Grid.Row="0" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
 
-                                <!--Editar-->
-                                <Button Content="Editar" Width="70" Margin="2" Background="LightBlue"
-                                Command="{Binding DataContext.EditarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                CommandParameter="{Binding}" />
+                    <!--Colunas Nome, Custo, Lucro, Valor de Venda, Quantidade Minima e Ativo-->
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
+                    <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*" />
+                    <DataGridTextColumn Header="Custo (R$)" Binding="{Binding Custo, StringFormat={}{0:N2}}" Width="130" />
+                    <DataGridTextColumn Header="Lucro (R$)" Binding="{Binding Lucro, StringFormat={}{0:N2}}" Width="130" />
+                    <DataGridTextColumn Header="Venda (R$)" Binding="{Binding ValorVenda, StringFormat={}{0:N2}}" Width="130" />
+                    <DataGridTextColumn Header="Qtd. Mínima" Binding="{Binding QuantidadeMin}" Width="130" />
+                    <DataGridTextColumn Header="Qtd. Atual" Binding="{Binding QuantidadeAtual}" Width="130" />
+                    <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Ativo}" Width="60" />
 
-                                <!--Inativar-->
-                                <Button Content="Inativar" Width="80" Margin="2" Background="LightYellow" Foreground="Gray"
-                                Command="{Binding DataContext.InativarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                CommandParameter="{Binding}"
-                                ToolTipService.ShowOnDisabled="True">
-                                    <Button.Style>
-                                        <Style TargetType="Button">
-                                            <Setter Property="IsEnabled" Value="{Binding Ativo}"/>
-                                            <Setter Property="ToolTip" Value="Inativar este Produto"/>
+                    <DataGridTemplateColumn Header="Ações" Width="300">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
 
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Ativo}" Value="False">
-                                                    <Setter Property="ToolTip" Value="Produto já está inativo"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-    
-                                <!--Excluir-->
-                                <Button Content="Excluir" Width="75" Margin="2" Background="LightCoral"
-                                Command="{Binding DataContext.ExcluirProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                CommandParameter="{Binding}" />
+                                <!--Botoes-->
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                    <!--Editar-->
+                                    <Button Content="Editar" Width="70" Margin="2" Background="LightBlue"
+                                    Command="{Binding DataContext.EditarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    CommandParameter="{Binding}" />
 
-            </DataGrid.Columns>
-        </DataGrid>
+                                    <!--Inativar-->
+                                    <Button Content="Inativar" Width="80" Margin="2" Background="LightYellow" Foreground="Gray"
+                                    Command="{Binding DataContext.InativarProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    CommandParameter="{Binding}"
+                                    ToolTipService.ShowOnDisabled="True">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="IsEnabled" Value="{Binding Ativo}"/>
+                                                <Setter Property="ToolTip" Value="Inativar este Produto"/>
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Ativo}" Value="False">
+                                                        <Setter Property="ToolTip" Value="Produto já está inativo"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <!--Excluir-->
+                                    <Button Content="Excluir" Width="75" Margin="2" Background="LightCoral"
+                                    Command="{Binding DataContext.ExcluirProdutoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    CommandParameter="{Binding}" />
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <!--Rodape com paginação-->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 15, 0, 0">
+
+                <TextBlock Text="{Binding TotalItens, StringFormat='{}Total no banco: {0} itens'}" 
+                   VerticalAlignment="Center" 
+                   Margin="0,0,30,0" 
+                   FontWeight="SemiBold" 
+                   Foreground="Gray"/>
+                
+                <TextBlock Text="Itens por página: " VerticalAlignment="Center" Margin="0,0,10,0"/>
+                
+                <ComboBox ItemsSource="{Binding OpcoesItensPorPagina}"
+                          SelectedItem="{Binding ItensPorPagina, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Width="60" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
+                
+                <Button Content="&lt; Anterior" Command="{Binding PaginaAnteriorCommand}" Width="80" Margin="0,0,10,0"/>
+
+                <TextBlock Text="{Binding PaginaAtual, StringFormat='{}Página {0} de '}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding TotalPaginas}" VerticalAlignment="Center" Margin="0,0,15,0" FontWeight="Bold"/>
+                
+                <Button Content="Próxima &gt;" Command="{Binding ProximaPaginaCommand}" Width="80"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
