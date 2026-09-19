@@ -181,15 +181,24 @@
                 <RowDefinition Height="Auto"/>
                 
             </Grid.RowDefinitions>
-            
-            <!--Campo Buscar Produto-->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 0, 10">
-                <TextBlock Text="Buscar Produto: " VerticalAlignment="Center" FontWeight="SemiBold" Margin="0, 0, 10, 0"/>
 
-                <TextBox Width="250" Padding="5"
+            <Grid Grid.Row="0" Margin="0, 0, 0, 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Tabela de Produtos" FontSize="16" FontWeight="Bold" Margin="0, 0, 0, 10"/>
+
+                <!--Campo Buscar Produto-->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 0, 10">
+                    <TextBlock Text="Buscar Produto: " VerticalAlignment="Center" FontWeight="SemiBold" Margin="0, 0, 10, 0"/>
+
+                    <TextBox Width="250" Padding="5"
                          Text="{Binding TextoBusca, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Digite o nome do produto para buscar"/>
-            </StackPanel>
+                </StackPanel>
+            </Grid>
 
             <!--Tabela de Produtos-->
             <DataGrid Grid.Row="1" ItemsSource="{Binding ProdutosLista}" AutoGenerateColumns="False" IsReadOnly="True">
