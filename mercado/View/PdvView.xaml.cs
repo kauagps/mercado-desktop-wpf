@@ -29,7 +29,13 @@ namespace mercado.View
             _viewModel = new PdvViewModel();
             DataContext = _viewModel;
 
+            this.Loaded += PdvView_Loaded;
+        }
+
+        private void PdvView_Loaded(object sender, RoutedEventArgs e)
+        {
             txtCodigoBarras.Focus();
+            Keyboard.Focus(txtCodigoBarras);
         }
 
         private void txtCodigoBarras_KeyDown(object sender, KeyEventArgs e)
