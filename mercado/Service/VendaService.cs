@@ -18,6 +18,18 @@ namespace mercado.Service
         public void SalvarVendaCompleta(Venda venda)
         {
             _context.Vendas.Add(venda);
+
+            foreach (var item in venda.Itens)
+            {
+                var produtoNoBanco = _context.Produtos.Find(item.Produto);
+
+                if (produtoNoBanco != null)
+                {
+                    produtoNoBanco.QuantidadeAtual -= item.Quantidade;
+                }
+            }
+
+
             _context.SaveChanges();
         }
     }
