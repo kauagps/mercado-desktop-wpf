@@ -44,5 +44,13 @@ namespace mercado.Service
         {
             return _context.Produtos.FirstOrDefault(p => p.CodigoBarras == codigo && p.Ativo);
         }
+
+        public bool CodigoBarrasJaExiste(string codigoBarras, int idDoProdutoAtual = 0)
+        {
+            if (string.IsNullOrWhiteSpace(codigoBarras))
+                return false;
+
+            return _context.Produtos.Any(p => p.CodigoBarras == codigoBarras && p.Id != idDoProdutoAtual);
+        }
     }
 }

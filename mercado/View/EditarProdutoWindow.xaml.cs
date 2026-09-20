@@ -42,6 +42,7 @@ namespace mercado.View
                 Ativo = produto.Ativo
             };
 
+
             DataContext = _produtoClone;
 
             double custoInicial = Convert.ToDouble(_produtoClone.Custo);
@@ -61,6 +62,20 @@ namespace mercado.View
                 MessageBox.Show(
                     "Por Favor, preencha Nome, Custo e Lucro corretamente.",
                     "Campos Obrigatórios",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            string codigoDigitado = _produtoClone.CodigoBarras;
+            int idAtual = _produtoClone.Id;
+
+            if (_produtoService.CodigoBarrasJaExiste(codigoDigitado, idAtual))
+            {
+                MessageBox.Show(
+                    "Este Código de Barras já está sendo usado por outro produto no sistema!",
+                    "Código Duplicado",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
 

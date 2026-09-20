@@ -28,6 +28,7 @@ namespace mercado.ViewModel
             set { _novoProduto = value; onPropertyChanged(nameof(NovoProduto)); }
         }
 
+
         // --- Variaveis Buscar --------------
         private string _textoBusca = string.Empty;
         public string TextoBusca
@@ -238,6 +239,20 @@ namespace mercado.ViewModel
             NovoProduto.ValorVenda = Math.Round(NovoProduto.ValorVenda,2);
             NovoProduto.QuantidadeMin = Math.Round(NovoProduto.QuantidadeMin,2);
             NovoProduto.QuantidadeAtual = Math.Round(NovoProduto.QuantidadeAtual,2);
+
+            string codigoDigitado = NovoProduto.CodigoBarras;
+            int idAtual = NovoProduto.Id;
+
+            if(_produtoService.CodigoBarrasJaExiste(codigoDigitado, idAtual))
+            {
+                MessageBox.Show(
+                    "Este Código de Barras já está sendo usado por outro produto no sistema!",
+                    "Código Duplicado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(NovoProduto.Nome) || 
                 NovoProduto.Custo < 0 ||

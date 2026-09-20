@@ -12,7 +12,7 @@ namespace mercado.Model
         public int Id { get; set; }
 
         public int VendaId { get; set; }
-        public Venda Venda { get; set; }
+        public Venda? Venda { get; set; }
         
 
         [MaxLength(30)]

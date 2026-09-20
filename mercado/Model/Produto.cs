@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace mercado.Model
 {
     public class Produto
     {
+        [Key]
         public int Id { get; set; }
+
+        [MaxLength(50)]
         public string CodigoBarras { get; set; } = string.Empty;
         public string Nome { get; set; } = string.Empty;
 
@@ -30,8 +34,6 @@ namespace mercado.Model
         [Column(TypeName = "decimal(18,2)")]
         public decimal QuantidadeMin { get; set; }
 
-
-        [Column(TypeName = "decimal(18,2)")]
         public bool Fracionado { get; set; }
 
 

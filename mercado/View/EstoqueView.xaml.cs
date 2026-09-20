@@ -24,6 +24,7 @@ namespace mercado.View
             InitializeComponent();
         }
 
+
         private void chkFracionado_Click(object sender, RoutedEventArgs e)
         {
             txtQuantidadeMin.Text = "0";
