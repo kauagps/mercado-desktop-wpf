@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mercado.View"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:localBehaviors="clr-namespace:mercado.Behaviors" 
         mc:Ignorable="d"
         Title="Finalizar Pagamento" Height="650" Width="800"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
@@ -37,7 +39,13 @@
 
                 <TextBlock Text="Valor a Pagar (R$):" Foreground="Gray"/>
                 <TextBox x:Name="txtValorPagamento" FontSize="24" FontWeight="Bold" Margin="0,0,0,15" Padding="5" 
-                         Text="{Binding FaltaPagar, StringFormat={}{0:N2}, Mode=OneWay}" KeyDown="txtValorPagamento_KeyDown"/>
+                         Text="{Binding FaltaPagar, StringFormat={}{0:N2}, Mode=OneWay}" KeyDown="txtValorPagamento_KeyDown">
+
+                    <i:Interaction.Behaviors>
+                        <localBehaviors:ApenasNumerosBehavior>
+                        </localBehaviors:ApenasNumerosBehavior>
+                    </i:Interaction.Behaviors>
+                </TextBox>
 
                 <Button Content="ADICIONAR PAGAMENTO (Enter)" Height="45" Background="#2196F3" Foreground="White" 
                         FontWeight="Bold" FontSize="16" Click="AdicionarPagamento_Click"/>

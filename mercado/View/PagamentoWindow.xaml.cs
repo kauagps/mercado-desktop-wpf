@@ -54,8 +54,19 @@ namespace mercado.View
 
         private void AdicionarPagamento_Click(object sender, RoutedEventArgs e)
         {
-            if (decimal.TryParse(txtValorPagamento.Text, out decimal valorDigitado))
+            string valorDigitadoTexto = txtValorPagamento.Text.Replace(".", ",");
+
+            if (decimal.TryParse(valorDigitadoTexto, out decimal valorDigitado))
             {
+
+                if (valorDigitado <= 0)
+                {
+                    MessageBox.Show("Digite um valor maior que zero", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtValorPagamento.Focus();
+                    txtValorPagamento.SelectAll();
+                    return;
+
+                }
                 _viewModel.AdicionarPagamento(txtFormaSelecionada.Text, valorDigitado);
 
                 txtValorPagamento.Text = _viewModel.FaltaPagar.ToString("N2");
@@ -65,6 +76,8 @@ namespace mercado.View
             else
             {
                 MessageBox.Show("Digite um valor válido.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                txtValorPagamento.Focus();
+                txtValorPagamento.SelectAll();
             }
         }
 

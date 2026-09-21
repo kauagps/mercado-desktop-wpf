@@ -4,6 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:mercado.View"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:localBehaviors="clr-namespace:mercado.Behaviors" 
       mc:Ignorable="d" 
       Background="White">
 
@@ -22,11 +24,21 @@
                     <Run Text="Quantidade:" FontWeight="Bold" FontSize="16" Foreground="#2c3e50" />
                     <Run Text="(Unidade / Kg)" FontSize="12" Foreground="Gray" />
                 </TextBlock>
-                <TextBox Text="{Binding QuantidadeAtual}" FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" Margin="0,0,0,15" Padding="5"/>
+                <TextBox Text="{Binding QuantidadeAtual}" FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" Margin="0,0,0,15" Padding="5">
+                    <i:Interaction.Behaviors>
+                        <localBehaviors:ApenasNumerosBehavior>
+                        </localBehaviors:ApenasNumerosBehavior>
+                    </i:Interaction.Behaviors>
+                </TextBox>
 
                 <!-- O CAMPO MÁGICO DO LEITOR -->
-                <TextBlock Text="Código de Barras:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox x:Name="txtCodigoBarras" FontSize="24" FontWeight="Bold" Margin="0,0,0,0" Padding="10" KeyDown="txtCodigoBarras_KeyDown" />
+                <TextBlock Text="Código de Barras:" FontWeight="Bold" Margin="0,0,0,5" />
+                <TextBox x:Name="txtCodigoBarras" FontSize="24" FontWeight="Bold" Margin="0,0,0,0" Padding="10" KeyDown="txtCodigoBarras_KeyDown" >
+                    <i:Interaction.Behaviors>
+                        <localBehaviors:ApenasNumerosBehavior>
+                        </localBehaviors:ApenasNumerosBehavior>
+                    </i:Interaction.Behaviors>
+                </TextBox>
                 <TextBlock Text="Para codigos digitado manualmente, aperte ENTER para confirmar" FontSize="12" Foreground="Gray" />
 
                 <!-- O Totalzão da Compra -->
