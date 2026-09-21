@@ -52,5 +52,15 @@ namespace mercado.Service
 
             return _context.Produtos.Any(p => p.CodigoBarras == codigoBarras && p.Id != idDoProdutoAtual);
         }
+
+        public System.Collections.Generic.List<Produto> BuscarPorNome(string nome)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+                return _context.Produtos.Where(p => p.Ativo).ToList();
+
+            return _context.Produtos
+                .Where(p => p.Nome.Contains(nome) && p.Ativo)
+                .ToList();
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using mercado.Service;
 using mercado.ViewModel;
+using mercado.View;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,6 +32,8 @@ namespace mercado.View
             DataContext = _viewModel;
 
             this.Loaded += PdvView_Loaded;
+
+            this.PreviewKeyDown += PdvView_PreviewKeyDown;
         }
 
         private void PdvView_Loaded(object sender, RoutedEventArgs e)
@@ -72,6 +76,39 @@ namespace mercado.View
             }
         
         txtCodigoBarras.Focus();
+        }
+
+        private void BuscarProduto_Click(object sender, RoutedEventArgs e)
+        {
+            var telaBusca = new BuscaProdutoWindow();
+
+            if (telaBusca.ShowDialog() == true)
+            {
+                string codigoEscolhido = telaBusca.CodigoBarrasSelecionado ?? string.Empty;
+
+                if (!string.IsNullOrWhiteSpace(codigoEscolhido))
+                {
+                    txtCodigoBarras.Text = codigoEscolhido;
+
+                    _viewModel.BiparProduto(codigoEscolhido);
+
+                    txtCodigoBarras.Clear();
+                }
+
+            }
+
+            txtCodigoBarras.Focus();
+            Keyboard.Focus(txtCodigoBarras);
+        }
+
+        private void PdvView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F2)
+            {
+                e.Handled = true;
+
+                BuscarProduto_Click(sender, e);
+            }
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿<Window x:Class="mercado.View.BuscaProdutoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mercado.View"
+        mc:Ignorable="d"
+        Title="Busca de Produtos (F2)" Height="450" Width="600"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="#F4F6F8">
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <TextBlock Text="Digite o nome do produto: " FontWeight="Bold" Foreground="#333" Margin="0,0,0,5" />
+
+            <TextBox x:Name="txtBusca" FontSize="18" Padding="5"
+                     TextChanged="txtBusca_TextChanged" PreviewKeyDown="txtBusca_PreviewKeyDown"/>
+        </StackPanel>
+
+        <DataGrid x:Name="gridResultados" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                  SelectionMode="Single" HeadersVisibility="Column" Background="White"
+                  MouseDoubleClick="gridResultados_MouseDoubleClick" PreviewKeyDown="gridResultados_PreviewKeyDown">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Código" Binding="{Binding CodigoBarras}" Width="120"/>
+                <DataGridTextColumn Header="Descrição do Produto" Binding="{Binding Nome}" Width="*"/>
+                <DataGridTextColumn Header="Preço" Binding="{Binding ValorVenda, StringFormat={}{0:N2}}" Width="80"/>
+                <DataGridTextColumn Header="Estoque" Binding="{Binding QuantidadeAtual}" Width="70"/>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+        
+    </Grid>
+</Window>
