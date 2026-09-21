@@ -4,6 +4,7 @@ using System.Text;
 using System.ComponentModel;
 using mercado.ViewModel;
 using System.Windows.Input;
+using System.Windows;
 
 
 
@@ -42,11 +43,17 @@ namespace mercado.ViewModel
 
         public void NavegarParaEstoque()
         {
+            if (CurrentViewModel == EstoqueVM) return;
+
+            if (!PodeMudarDeTela()) return;
             CurrentViewModel = EstoqueVM;
         }
 
         public void NavegarParaPdv()
         {
+            if (CurrentViewModel == PdvVM) return;
+
+            if (!PodeMudarDeTela()) return;
             CurrentViewModel = PdvVM;
         }
 
@@ -54,6 +61,32 @@ namespace mercado.ViewModel
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private bool PodeMudarDeTela()
+        {
+            if (CurrentViewModel is PdvViewModel pdvViewModel)
+            {
+                if (pdvViewModel.Carrinho.Count > 0)
+                {
+                    var resposta = MessageBox.Show(
+                        "Existe uma venda em andamento. Se você trocar de tela agora, o carrinho será esvaziado.\n\nDeseja realmente sair do PDV?",
+                        "Venda em Andamento",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                    if (resposta == MessageBoxResult.No)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        pdvViewModel.CancelarVenda();
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

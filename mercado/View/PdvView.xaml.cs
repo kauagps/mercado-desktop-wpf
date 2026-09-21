@@ -22,14 +22,12 @@ namespace mercado.View
     /// </summary>
     public partial class PdvView : UserControl
     {
-        private PdvViewModel _viewModel;
+        private PdvViewModel _viewModel => (PdvViewModel)this.DataContext;
 
 
         public PdvView()
         {
             InitializeComponent();
-            _viewModel = new PdvViewModel();
-            DataContext = _viewModel;
 
             this.Loaded += PdvView_Loaded;
 
@@ -108,6 +106,27 @@ namespace mercado.View
                 e.Handled = true;
 
                 BuscarProduto_Click(sender, e);
+            }
+        }
+
+        public void CancelarCompra_Click(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel.Carrinho.Count() > 0)
+            {
+                var resposta = MessageBox.Show(
+                    "Existe uma venda em andamento, deseja realmente cancelar?",
+                    "Venda em Andamento",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (resposta == MessageBoxResult.No)
+                {
+                    return;
+                }
+                else
+                {
+                    _viewModel.CancelarVenda();
+                }
             }
         }
     }

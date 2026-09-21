@@ -18,6 +18,8 @@ namespace mercado.ViewModel
 
         private ProdutoService _produtoService;
 
+
+
         public ObservableCollection<ItemVenda> Carrinho { get; set; } = new ObservableCollection<ItemVenda>();
 
         private decimal _totalCompra;
@@ -117,6 +119,15 @@ namespace mercado.ViewModel
         public void CalcularTotal()
         {
             TotalCompra = Carrinho.Sum(item => item.Subtotal);
+        }
+
+        public void CancelarVenda()
+        {
+            Carrinho.Clear();
+
+            QuantidadeAtual = 1;
+
+            CalcularTotal();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -106,5 +106,23 @@ namespace mercado.View
                 }
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult resposta = MessageBox.Show(
+                "Tem certeza que deseja cancelar a operação e fechar a tela?",
+                "Confirmação de Cancelamento",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (resposta == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                e.Cancel = false;
+            }
+        }
     }
 }

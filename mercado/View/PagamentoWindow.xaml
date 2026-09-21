@@ -9,7 +9,9 @@
         mc:Ignorable="d"
         Title="Finalizar Pagamento" Height="650" Width="800"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Background="#F4F6F8">
+        Background="#F4F6F8"
+        
+        Closing="Window_Closing">
     
 
     <Grid Margin="20">

@@ -7,7 +7,9 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:localBehaviors="clr-namespace:mercado.Behaviors" 
         mc:Ignorable="d"
-        Title="Editar Produto" Height="550" Width="450">
+        Title="Editar Produto" Height="550" Width="450"
+        
+        Closing="Window_Closing">
     <Grid Margin="20">
         
         <!--========================================================================================================-->
