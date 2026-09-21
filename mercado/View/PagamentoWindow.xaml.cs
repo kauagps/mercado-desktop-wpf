@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using mercado.Model;
 using mercado.ViewModel;
 
 namespace mercado.View
@@ -76,6 +77,21 @@ namespace mercado.View
             }
             VendaConcluida = true;
             this.Close();
+        }
+
+        private void RemoverPagamento_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button botaoClicado)
+            { 
+                if (botaoClicado.DataContext is PagamentoVenda pagamentoParaRemover)
+                {
+                    _viewModel.RemoverPagamento(pagamentoParaRemover);
+
+                    txtValorPagamento.Text = _viewModel.FaltaPagar.ToString("N2");
+                    txtValorPagamento.Focus();
+                    txtValorPagamento.SelectAll();
+                }
+            }
         }
     }
 }

@@ -26,10 +26,10 @@
 
                 <!-- Botões de Seleção -->
                 <UniformGrid Rows="2" Columns="2" Height="100" Margin="0,0,0,20">
-                    <Button Content="Dinheiro" x:Name="btnDinheiro" Margin="5" Background="#E3F2FD" Click="SelecionarFormaPagamento_Click"/>
-                    <Button Content="Pix" x:Name="btnPix" Margin="5" Background="#E8F5E9" Click="SelecionarFormaPagamento_Click"/>
-                    <Button Content="Cartão de Crédito" x:Name="btnCredito" Margin="5" Background="#FFF3E0" Click="SelecionarFormaPagamento_Click"/>
-                    <Button Content="Cartão de Débito" x:Name="btnDebito" Margin="5" Background="#FCE4EC" Click="SelecionarFormaPagamento_Click"/>
+                    <Button Content="Dinheiro" x:Name="btnDinheiro" Margin="5" Background="#E3F2FD" Foreground="Black" Click="SelecionarFormaPagamento_Click"/>
+                    <Button Content="Pix" x:Name="btnPix" Margin="5" Background="#E8F5E9" Foreground="Black" Click="SelecionarFormaPagamento_Click"/>
+                    <Button Content="Cartão de Crédito" x:Name="btnCredito" Margin="5" Background="#FFF3E0" Foreground="Black" Click="SelecionarFormaPagamento_Click"/>
+                    <Button Content="Cartão de Débito" x:Name="btnDebito" Margin="5" Background="#FCE4EC" Foreground="Black" Click="SelecionarFormaPagamento_Click"/>
                 </UniformGrid>
 
                 <TextBlock Text="Forma Selecionada:" Foreground="Gray"/>
@@ -48,6 +48,15 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding FormaPagamento}" Width="*" />
                         <DataGridTextColumn Binding="{Binding ValorPago, StringFormat={}{0:N2}}" Width="100" />
+
+                        <DataGridTemplateColumn Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="X" Background="#EF5350" Foreground="White" FontWeight="Bold" Width="Auto"
+                                        BorderThickness="0" Cursor="Hand" Click="RemoverPagamento_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
