@@ -19,7 +19,6 @@ namespace mercado.View
     /// </summary>
     public partial class PagamentoWindow : Window
     {
-
         private PagamentoViewModel _viewModel;
 
         public bool VendaConcluida { get; private set; } = false;
@@ -109,6 +108,8 @@ namespace mercado.View
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (VendaConcluida == true) return;
+
             MessageBoxResult resposta = MessageBox.Show(
                 "Tem certeza que deseja cancelar a operação e fechar a tela?",
                 "Confirmação de Cancelamento",

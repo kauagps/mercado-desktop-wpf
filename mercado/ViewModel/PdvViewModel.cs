@@ -64,18 +64,25 @@ namespace mercado.ViewModel
 
             foreach (var item in novaVenda.Itens)
             {
-                item.Produto = null;
+                item.Produto = null!;
             }
 
             _vendaService.SalvarVendaCompleta(novaVenda);
 
-            var reciboService = new ReciboService();
-            reciboService.GerarCupomTxt(novaVenda, Carrinho.ToList());
+            MessageBoxResult respostaImpressao = MessageBox.Show(
+                "Venda concluída com sucesso!\n\nDeseja imprimir o comprovante para o cliente?",
+                "Imprimir Cupom",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
 
-            Carrinho.Clear();
-            QuantidadeAtual = 1;
-            CalcularTotal();
-            MessageBox.Show("Venda concluída com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            if(respostaImpressao == MessageBoxResult.Yes)
+            {
+                var reciboService = new ReciboService();
+
+                reciboService.ImprimirCupomNaTermica(novaVenda, Carrinho.ToList());
+            }
+
+            CancelarVenda();
         }
 
 
