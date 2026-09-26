@@ -129,5 +129,20 @@ namespace mercado.View
                 }
             }
         }
+
+
+        private void btnDesconto_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_viewModel.Carrinho.Any()) return;
+
+            var telaDesconto = new AjusteValorWindow("Informe o Desconto (R$)");
+
+            bool? resposta = telaDesconto.ShowDialog();
+
+            if (resposta == true)
+            {
+                _viewModel.Desconto = telaDesconto.ValorDigitado;
+            }
+        }
     }
 }

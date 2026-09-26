@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="AGENTS.md" />
+    <File Path="docs/requisitos.md" />
+  </Folder>
   <Project Path="mercado/mercado.csproj" />
 </Solution>

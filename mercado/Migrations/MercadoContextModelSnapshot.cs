@@ -131,8 +131,14 @@ namespace mercado.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("Acrescimo")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("DataVenda")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Desconto")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(18,2)");

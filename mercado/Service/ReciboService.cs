@@ -33,7 +33,7 @@ namespace mercado.Service
                 int alturaAtual = 10;
 
                 // CABEÇALHO
-                graficos.DrawString("       SUPERMERCADO Fenix Rocha", fonteNegrito, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
+                graficos.DrawString("       SUPERMERCADO Mercearia Kaylane", fonteNegrito, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
                 alturaAtual += 20;
                 graficos.DrawString("   Recibo de Venda - Sem valor fiscal", fonteNormal, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
                 alturaAtual += 20;
@@ -70,9 +70,30 @@ namespace mercado.Service
                 graficos.DrawString("----------------------------------", fonteNormal, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
                 alturaAtual += 20;
 
-                // TOTAL
+                // Subtotal (soma limpa dos produtos)
+                decimal subtotal = venda.ValorTotal + venda.Desconto - venda.Acrescimo;
+                graficos.DrawString("SUBTOTAL: R$ " + subtotal.ToString("N2"), fonteNormal, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
+                alturaAtual += 15;
+
+                // Só imprime o desconto/acréscimo se eles forem maiores que zero
+                if (venda.Desconto > 0)
+                {
+                    graficos.DrawString("DESCONTO: R$ -" + venda.Desconto.ToString("N2"), fonteNormal, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
+                    alturaAtual += 15;
+                }
+
+                if (venda.Acrescimo > 0)
+                {
+                    graficos.DrawString("ACRÉSCIMO: R$ +" + venda.Acrescimo.ToString("N2"), fonteNormal, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
+                    alturaAtual += 15;
+                }
+
+                alturaAtual += 5;
+                graficos.DrawString("----------------------------------", fonteNormal, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
+                alturaAtual += 20;
+
+                // O Total final que você já tinha:
                 graficos.DrawString("TOTAL: R$ " + venda.ValorTotal.ToString("N2"), fonteNegrito, System.Drawing.Brushes.Black, margemEsquerda, alturaAtual);
-                alturaAtual += 40; // Espaço em branco no final para a guilhotina cortar certo
             };
 
             try

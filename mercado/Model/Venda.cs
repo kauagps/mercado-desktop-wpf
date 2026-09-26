@@ -13,6 +13,9 @@ namespace mercado.Model
         
         public DateTime DataVenda { get; set; } = DateTime.Now;
 
+        public decimal Desconto { get; set; }
+        public decimal Acrescimo { get; set; }
+
         [Column(TypeName = "decimal(18,2)")]
         public decimal ValorTotal { get; set; }
 

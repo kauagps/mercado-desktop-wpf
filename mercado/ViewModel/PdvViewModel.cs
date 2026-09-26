@@ -9,6 +9,7 @@ using System.Windows;
 using mercado.Model;
 using mercado.Service;
 
+
 namespace mercado.ViewModel
 {
     public class PdvViewModel : INotifyPropertyChanged
@@ -18,9 +19,31 @@ namespace mercado.ViewModel
 
         private ProdutoService _produtoService;
 
-
-
         public ObservableCollection<ItemVenda> Carrinho { get; set; } = new ObservableCollection<ItemVenda>();
+
+        private decimal _desconto;
+        public decimal Desconto
+        {
+            get { return _desconto; }
+            set
+            {
+                _desconto = value;
+                OnPropertyChanged(nameof(Desconto));
+                CalcularTotal();
+            }
+        }
+
+        private decimal _acrescimo;
+        public decimal Acrescimo
+        {
+            get { return _acrescimo; }
+            set
+            {
+                _acrescimo = value;
+                OnPropertyChanged(nameof(Acrescimo));
+                CalcularTotal();
+            }
+        }
 
         private decimal _totalCompra;
 
@@ -51,6 +74,8 @@ namespace mercado.ViewModel
             var novaVenda = new Venda
             {
                 ValorTotal = TotalCompra,
+                Desconto = this.Desconto,
+                Acrescimo = this.Acrescimo,
                 DataVenda = System.DateTime.Now,
                 Pagamentos = pagamentosRealizados,
                 Itens = Carrinho.Select(c => new ItemVenda
@@ -125,12 +150,19 @@ namespace mercado.ViewModel
 
         public void CalcularTotal()
         {
-            TotalCompra = Carrinho.Sum(item => item.Subtotal);
+            decimal somaItens = Carrinho.Sum(item => item.Subtotal);
+            decimal totalComAjustes = somaItens + Acrescimo - Desconto;
+
+            TotalCompra = totalComAjustes < 0 ? 0 : totalComAjustes;
         }
 
         public void CancelarVenda()
         {
             Carrinho.Clear();
+
+            Desconto = 0;
+
+            Acrescimo = 0;
 
             QuantidadeAtual = 1;
 
