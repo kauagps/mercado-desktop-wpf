@@ -34,7 +34,7 @@
             <!--Custo-->
             <TextBlock Text="Custo (R$):"/>
             <TextBox x:Name="txtCusto" 
-                     Text="{Binding Custo, StringFormat={}{0:N2}}" 
+                     Text="{Binding Custo, StringFormat={}{0:N2}, UpdateSourceTrigger=LostFocus}" 
                      TextChanged="CalcularPrecoIdeal_TextChanged"
                      Margin="0,0,0,10" 
                      Padding="2">
@@ -47,7 +47,7 @@
             <!--Lucro-->
             <TextBlock Text="Lucro (%):"/>
             <TextBox x:Name="txtLucro" 
-                     Text="{Binding Lucro, StringFormat={}{0:N2}}" 
+                     Text="{Binding Lucro, StringFormat={}{0:N2}, UpdateSourceTrigger=LostFocus}" 
                      TextChanged="CalcularPrecoIdeal_TextChanged"
                      Margin="0,0,0,10" 
                      Padding="2">
@@ -66,7 +66,7 @@
 
             <!--Valor de Venda-->
             <TextBlock Text="Valor de Venda (R$):"/>
-            <TextBox Text="{Binding ValorVenda, StringFormat={}{0:N2}}" Margin="0,0,0,10" Padding="2">
+            <TextBox Text="{Binding ValorVenda, StringFormat={}{0:N2}, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,10" Padding="2">
                 <i:Interaction.Behaviors>
                     <localBehaviors:ApenasNumerosBehavior>
                     </localBehaviors:ApenasNumerosBehavior>
@@ -77,7 +77,7 @@
             <TextBlock Text="Quantidade Minima:"/>
             <TextBox x:Name="txtQuantidadeMin" 
                      Tag="{Binding IsChecked, ElementName=chkFracionado}"
-                     Text="{Binding QuantidadeMin}" 
+                     Text="{Binding QuantidadeMin, UpdateSourceTrigger=LostFocus}" 
                      Margin="0,0,0,10" 
                      Padding="2">
                 <i:Interaction.Behaviors>
@@ -89,7 +89,7 @@
             <TextBlock Text="Quantidade Atual:"/>
             <TextBox x:Name="txtQuantidadeAtual" 
                      Tag="{Binding IsChecked, ElementName=chkFracionado}"
-                     Text="{Binding QuantidadeAtual}" 
+                     Text="{Binding QuantidadeAtual, UpdateSourceTrigger=LostFocus}" 
                      Margin="0,0,0,10" 
                      Padding="2">
                 <i:Interaction.Behaviors>

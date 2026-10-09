@@ -45,6 +45,9 @@ namespace mercado.ViewModel
             }
         }
 
+        public decimal DescontoValorDigitado { get; set; } = 0;
+        public bool DescontoEhPorcentual { get; set; } = false;
+
         private decimal _totalCompra;
 
         public PdvViewModel()
@@ -83,7 +86,8 @@ namespace mercado.ViewModel
                     ProdutoId = c.ProdutoId,
                     Quantidade = c.Quantidade,
                     ValorUnitario = c.ValorUnitario,
-                    Subtotal = c.Subtotal
+                    Subtotal = c.Subtotal,
+                    Desconto = c.Desconto
                 }).ToList()
             };
 
@@ -151,9 +155,46 @@ namespace mercado.ViewModel
         public void CalcularTotal()
         {
             decimal somaItens = Carrinho.Sum(item => item.Subtotal);
-            decimal totalComAjustes = somaItens + Acrescimo - Desconto;
+
+            decimal descontoGlobal = _desconto;
+            if (DescontoEhPorcentual)
+            {
+                descontoGlobal = somaItens * (DescontoValorDigitado / 100m);
+            }
+
+            decimal totalComAjustes = somaItens + Acrescimo - descontoGlobal;
+            _desconto = descontoGlobal;
+            OnPropertyChanged(nameof(Desconto));
 
             TotalCompra = totalComAjustes < 0 ? 0 : totalComAjustes;
+        }
+
+        public void AplicarDescontoAoItem(ItemVenda item, decimal valor, bool ehPorcentual)
+        {
+            if (item == null) return;
+
+            decimal desconto = 0;
+            if (ehPorcentual)
+            {
+                desconto = item.Subtotal * (valor / 100);
+            }
+            else
+            {
+                desconto = valor;
+            }
+
+            // Limitar o desconto entre 0 e o subtotal do item
+            if (desconto < 0) desconto = 0;
+            if (desconto > item.Subtotal) desconto = item.Subtotal;
+
+            item.Desconto = desconto;
+            int idx = Carrinho.IndexOf(item);
+            if (idx >= 0)
+            {
+                Carrinho.RemoveAt(idx);
+                Carrinho.Insert(idx, item);
+            }
+            CalcularTotal();
         }
 
         public void CancelarVenda()

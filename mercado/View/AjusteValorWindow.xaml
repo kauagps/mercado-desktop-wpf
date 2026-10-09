@@ -10,7 +10,7 @@
         xmlns:localBehaviors="clr-namespace:mercado.Behaviors" 
         
         
-        Title="Ajuste de Valor" Height="220" Width="350"
+        Title="Ajuste de Valor" Height="305" Width="350"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow"
@@ -19,14 +19,30 @@
     <StackPanel>
 
         <!-- O título que vai mudar (Ex: "Informe o Desconto") -->
+        
         <TextBlock x:Name="lblMensagem" Text="Informe o valor:" 
                    FontSize="18" FontWeight="Bold" Foreground="#2C3E50" 
                    HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
+        <RadioButton x:Name="valorReal" Content="Valor Real" IsChecked="True" Checked="trocarInput" />
         <!-- A caixa onde o operador digita -->
-        <TextBox x:Name="txtValor" FontSize="24" FontWeight="Bold" 
+        <TextBox x:Name="txtValorReal" FontSize="24" FontWeight="Bold" 
                  HorizontalContentAlignment="Center" Padding="5" Margin="0,0,0,20"
                  KeyDown="txtValor_KeyDown" >
+        
+
+            <i:Interaction.Behaviors>
+                <localBehaviors:ApenasNumerosBehavior>
+                </localBehaviors:ApenasNumerosBehavior>
+            </i:Interaction.Behaviors>
+        </TextBox>
+        
+        <RadioButton x:Name="valorPorcent" Content="Valor %" Checked="trocarInput"/>
+
+        <TextBox x:Name="txtValorPorcent" FontSize="24" FontWeight="Bold" 
+         HorizontalContentAlignment="Center" Padding="5" Margin="0,0,0,20"
+         KeyDown="txtValor_KeyDown" IsEnabled="False">
+
 
             <i:Interaction.Behaviors>
                 <localBehaviors:ApenasNumerosBehavior>

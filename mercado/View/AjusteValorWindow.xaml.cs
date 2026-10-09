@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace mercado.View
 {
     
@@ -18,13 +19,15 @@ namespace mercado.View
         
         public decimal ValorDigitado { get; private set; }
 
+        public bool EhPorcentual { get; private set; }
+
         public AjusteValorWindow(string mensagem)
         {
             InitializeComponent();
 
             lblMensagem.Text = mensagem;
 
-            txtValor.Focus();
+            txtValorReal.Focus();
         }
 
         private void btnConfirmar_Click(object sender, RoutedEventArgs e)
@@ -39,18 +42,35 @@ namespace mercado.View
 
         private void ConfirmarValor()
         {
-            string texto = txtValor.Text.Replace(".", ",");
-
-            if (decimal.TryParse(texto, out decimal valorConvertido))
+            if (valorReal.IsChecked == true)
             {
-                ValorDigitado = valorConvertido;
-
-                this.DialogResult = true;
+                string texto = txtValorReal.Text.Replace(".", ",");
+                if (decimal.TryParse(texto, out decimal valorConvertido) && valorConvertido >= 0)
+                {
+                    ValorDigitado = valorConvertido;
+                    EhPorcentual = false;
+                    this.DialogResult = true;
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, digite um valor numérico válido.", "Valor Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtValorReal.SelectAll();
+                }
             }
-            else
+            else // porcentagem
             {
-                MessageBox.Show("Por favor, digite um valor numérico válido.", "Valor Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtValor.SelectAll();
+                string texto = txtValorPorcent.Text.Replace(".", ",");
+                if (decimal.TryParse(texto, out decimal valorConvertido) && valorConvertido >= 0 && valorConvertido <= 100)
+                {
+                    ValorDigitado = valorConvertido; // ex: 10 = 10%
+                    EhPorcentual = true;
+                    this.DialogResult = true;
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, digite um percentual válido (0 a 100).", "Percentual Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtValorPorcent.SelectAll();
+                }
             }
         }
 
@@ -63,6 +83,33 @@ namespace mercado.View
             else if(e.Key == Key.Escape)
             {
                 this.DialogResult = false;
+            }
+        }
+
+        private void trocarInput(object sender, RoutedEventArgs e)
+        {
+            var rb = sender as RadioButton;
+            if (rb == null) return;
+
+            bool isValorReal = rb == valorReal;
+
+            if (txtValorReal != null)
+            {
+                txtValorReal.IsEnabled = isValorReal;
+            }
+            if(txtValorPorcent != null)
+            {
+                txtValorPorcent.IsEnabled = !isValorReal;
+            }
+
+            if (isValorReal && txtValorReal != null)
+            {
+                txtValorReal.Focus();
+
+            }
+            else if(!isValorReal && txtValorPorcent != null)
+            {
+                txtValorPorcent.Focus();
             }
         }
     }

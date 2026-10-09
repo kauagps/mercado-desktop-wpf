@@ -27,7 +27,7 @@ namespace mercado.Behaviors
 
         private void AssociatedObject_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            bool permiteFracionado = AssociatedObject.Tag is bool valor && valor;
+            bool permiteFracionado = (AssociatedObject.Tag is bool b && b) || (AssociatedObject.Tag?.ToString() == "True");
 
             if (permiteFracionado)
             {

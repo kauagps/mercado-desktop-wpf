@@ -21,7 +21,7 @@ namespace mercado.Service
 
             foreach (var item in venda.Itens)
             {
-                var produtoNoBanco = _context.Produtos.Find(item.Produto);
+                var produtoNoBanco = _context.Produtos.Find(item.ProdutoId);
 
                 if (produtoNoBanco != null)
                 {

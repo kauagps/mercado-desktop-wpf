@@ -14,6 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Media.Animation;
+using System.Linq;
+using System.Windows.Interop;
+using mercado.Model;
 
 namespace mercado.View
 {
@@ -23,6 +27,7 @@ namespace mercado.View
     public partial class PdvView : UserControl
     {
         private PdvViewModel _viewModel => (PdvViewModel)this.DataContext;
+        private DateTime _ultimoClique = DateTime.MinValue;
 
 
         public PdvView()
@@ -107,6 +112,19 @@ namespace mercado.View
 
                 BuscarProduto_Click(sender, e);
             }
+
+            if (e.Key == Key.F3 || e.SystemKey == Key.F3)
+            {
+                e.Handled = true;
+                btnEditarCarrinho_Click(sender, e);
+            }
+
+            if (e.Key == Key.F10 || e.SystemKey == Key.F10)
+            {
+                
+                e.Handled = true;
+                btnDesconto_Click(sender, e);
+            }
         }
 
         public void CancelarCompra_Click(object sender, RoutedEventArgs e)
@@ -130,18 +148,53 @@ namespace mercado.View
             }
         }
 
+        private void btnEditarCarrinho_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_viewModel.Carrinho.Any())
+            {
+                MessageBox.Show("O carrinho está vazio.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var janela = new EditarCarrinhoWindow(_viewModel.Carrinho);
+            bool? resultado = janela.ShowDialog();
+
+            if (resultado == true && janela.CarrinhoEditado != null)
+            {
+                // Atualiza o carrinho original com os itens editados
+                _viewModel.Carrinho.Clear();
+                foreach (var item in janela.CarrinhoEditado)
+                {
+                    _viewModel.Carrinho.Add(item);
+                }
+                _viewModel.CalcularTotal();
+            }
+        }
 
         private void btnDesconto_Click(object sender, RoutedEventArgs e)
         {
             if (!_viewModel.Carrinho.Any()) return;
 
-            var telaDesconto = new AjusteValorWindow("Informe o Desconto (R$)");
+            var mensagem = (_viewModel.Desconto > 0) ? "Atualizar Desconto Global (R$)" : "Informe o Desconto (R$)";
+            var telaDesconto = new AjusteValorWindow(mensagem);
 
             bool? resposta = telaDesconto.ShowDialog();
 
             if (resposta == true)
             {
-                _viewModel.Desconto = telaDesconto.ValorDigitado;
+                if (telaDesconto.EhPorcentual)
+                {
+                    _viewModel.DescontoValorDigitado = telaDesconto.ValorDigitado;
+                    _viewModel.DescontoEhPorcentual = true;
+                }
+                else
+                {
+                    _viewModel.DescontoValorDigitado = telaDesconto.ValorDigitado;
+                    _viewModel.DescontoEhPorcentual = false;
+                    _viewModel.Desconto = telaDesconto.ValorDigitado;
+                }
+                // Sempre recalcular o total após confirmar desconto
+                _viewModel.CalcularTotal();
             }
         }
     }

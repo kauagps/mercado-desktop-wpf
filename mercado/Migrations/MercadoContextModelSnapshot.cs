@@ -30,6 +30,9 @@ namespace mercado.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("Desconto")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("ProdutoId")
                         .HasColumnType("int");
 
