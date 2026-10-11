@@ -112,5 +112,12 @@ namespace mercado.View
                 txtValorPorcent.Focus();
             }
         }
+
+        public void ForcarModoValorReal()
+        {
+            valorReal.IsChecked = true;
+            valorPorcent.IsEnabled = false;
+            trocarInput(valorReal, new RoutedEventArgs());
+        }
     }
 }

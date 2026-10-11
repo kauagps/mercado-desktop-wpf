@@ -29,7 +29,8 @@ namespace mercado.View
                     Quantidade = item.Quantidade,
                     ValorUnitario = item.ValorUnitario,
                     Subtotal = item.Subtotal,
-                    Desconto = item.Desconto
+                    Desconto = item.Desconto,
+                    Acrescimo = item.Acrescimo
                 });
             }
             dgCarrinho.ItemsSource = _carrinho;
@@ -37,9 +38,72 @@ namespace mercado.View
 
         private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            // Atualiza subtotal automaticamente após edição
-            var item = (ItemVenda)e.Row.DataContext;
-            // Como Subtotal é calculado automaticamente pelo getter, não precisa atribuir
+            // Validação em tempo real ao terminar edição de célula
+            if (e.EditAction == DataGridEditAction.Commit)
+            {
+                var item = (ItemVenda)e.Row.DataContext;
+                var column = e.Column as DataGridBoundColumn;
+                if (column == null) return;
+
+                var bindingPath = (column.Binding as Binding)?.Path.Path;
+                if (string.IsNullOrEmpty(bindingPath)) return;
+
+                // Obter o valor digitado no TextBox de edição
+                var textBox = e.EditingElement as TextBox;
+                if (textBox == null) return;
+
+                string texto = textBox.Text.Trim().Replace(".", ",");
+                if (!decimal.TryParse(texto, out decimal valorDigitado))
+                {
+                    MessageBox.Show("Valor inválido. Digite um número válido.", "Erro de Validação", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    e.Cancel = true;
+                    return;
+                }
+
+                // Validações por coluna
+                switch (bindingPath)
+                {
+                    case "Quantidade":
+                        if (valorDigitado <= 0)
+                        {
+                            MessageBox.Show("A quantidade deve ser maior que zero.", "Quantidade Inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            e.Cancel = true;
+                            return;
+                        }
+                        // Validar se produto não fracionado aceita apenas inteiros
+                        if (item.Produto != null && !item.Produto.Fracionado && (valorDigitado % 1) != 0)
+                        {
+                            MessageBox.Show($"O produto '{item.Produto.Nome}' só aceita quantidade inteira.", "Quantidade Inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            e.Cancel = true;
+                            return;
+                        }
+                        break;
+
+                    case "Desconto":
+                        if (valorDigitado < 0)
+                        {
+                            MessageBox.Show("O desconto não pode ser negativo.", "Desconto Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            e.Cancel = true;
+                            return;
+                        }
+                        if (valorDigitado > item.ValorUnitario)
+                        {
+                            MessageBox.Show($"O desconto não pode ser maior que o valor unitário (R$ {item.ValorUnitario:N2}).", "Desconto Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            e.Cancel = true;
+                            return;
+                        }
+                        break;
+
+                    case "Acrescimo":
+                        if (valorDigitado < 0)
+                        {
+                            MessageBox.Show("O acréscimo não pode ser negativo.", "Acréscimo Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            e.Cancel = true;
+                            return;
+                        }
+                        break;
+                }
+            }
         }
 
         private void BtnExcluir_Click(object sender, RoutedEventArgs e)
@@ -88,9 +152,17 @@ namespace mercado.View
                     MessageBox.Show($"O desconto do produto '{item.Produto?.Nome}' não pode ser maior que o valor unitário.", "Desconto Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
+                // Validação: acréscimo não negativo
+                if (item.Acrescimo < 0)
+                {
+                    MessageBox.Show($"O acréscimo do produto '{item.Produto?.Nome}' não pode ser negativo.", "Acréscimo Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 if (item.Subtotal < 0)
                 {
-                    MessageBox.Show($"O subtotal do produto '{item.Produto?.Nome}' ficou negativo. Verifique o desconto aplicado.", "Subtotal Negativo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show($"O subtotal do produto '{item.Produto?.Nome}' ficou negativo. Verifique o desconto/acréscimo aplicado.", "Subtotal Negativo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 

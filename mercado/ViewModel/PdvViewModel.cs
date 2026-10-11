@@ -87,7 +87,8 @@ namespace mercado.ViewModel
                     Quantidade = c.Quantidade,
                     ValorUnitario = c.ValorUnitario,
                     Subtotal = c.Subtotal,
-                    Desconto = c.Desconto
+                    Desconto = c.Desconto,
+                    Acrescimo = c.Acrescimo
                 }).ToList()
             };
 
@@ -188,6 +189,25 @@ namespace mercado.ViewModel
             if (desconto > item.Subtotal) desconto = item.Subtotal;
 
             item.Desconto = desconto;
+            int idx = Carrinho.IndexOf(item);
+            if (idx >= 0)
+            {
+                Carrinho.RemoveAt(idx);
+                Carrinho.Insert(idx, item);
+            }
+            CalcularTotal();
+        }
+
+        public void AplicarAcrescimoAoItem(ItemVenda item, decimal valor)
+        {
+            if (item == null) return;
+
+            decimal acrescimo = valor;
+
+            // Limitar o acréscimo para não ser negativo
+            if (acrescimo < 0) acrescimo = 0;
+
+            item.Acrescimo = acrescimo;
             int idx = Carrinho.IndexOf(item);
             if (idx >= 0)
             {

@@ -26,11 +26,14 @@ namespace mercado.Model
         [Column(TypeName = "decimal(18,2)")]
         public decimal Subtotal
         {
-            get { return (Quantidade * ValorUnitario) - Desconto; }
+            get { return (Quantidade * ValorUnitario) - Desconto + Acrescimo; }
             set { /* mantido para compatibilidade; valor real calculado */ }
         }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Desconto { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Acrescimo { get; set; }
     }
 }

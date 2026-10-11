@@ -125,6 +125,12 @@ namespace mercado.View
                 e.Handled = true;
                 btnDesconto_Click(sender, e);
             }
+
+            if (e.Key == Key.OemPlus || e.Key == Key.Add)
+            {
+                e.Handled = true;
+                btnAcrescimo_Click(sender, e);
+            }
         }
 
         public void CancelarCompra_Click(object sender, RoutedEventArgs e)
@@ -194,6 +200,28 @@ namespace mercado.View
                     _viewModel.Desconto = telaDesconto.ValorDigitado;
                 }
                 // Sempre recalcular o total após confirmar desconto
+                _viewModel.CalcularTotal();
+            }
+        }
+
+        private void btnAcrescimo_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_viewModel.Carrinho.Any()) return;
+
+            var mensagem = (_viewModel.Acrescimo > 0) ? "Atualizar Acréscimo Global (R$)" : "Informe o Acréscimo (R$)";
+            var telaAcrescimo = new AjusteValorWindow(mensagem);
+
+            // Forçar modo valor real apenas (desabilitar porcentagem)
+            telaAcrescimo.Loaded += (s, args) =>
+            {
+                telaAcrescimo.ForcarModoValorReal();
+            };
+
+            bool? resposta = telaAcrescimo.ShowDialog();
+
+            if (resposta == true)
+            {
+                _viewModel.Acrescimo = telaAcrescimo.ValorDigitado;
                 _viewModel.CalcularTotal();
             }
         }

@@ -19,6 +19,7 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0, 0, 0, 10">
             <Button Content="(F2) - Buscar Produto" Height="35" Width="auto" Margin="0,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="Aqua" Click="BuscarProduto_Click"/>
             <Button Content="(F10) - Desconto" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="Aqua" Click="btnDesconto_Click"/>
+            <Button Content="(+) - Acréscimo" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#FF9800" Click="btnAcrescimo_Click"/>
             <Button Content="(F3) - Editar Carrinho" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#FF9800" Click="btnEditarCarrinho_Click"/>
         </StackPanel>
 
@@ -59,6 +60,7 @@
                     <TextBlock Text="TOTAL DA COMPRA:" FontSize="18" FontWeight="Bold" Foreground="Gray" Margin="0,20,0,0"/>
                     <TextBlock Text="{Binding TotalCompra, StringFormat='{}R$ {0:N2}'}" FontSize="45" FontWeight="Black" Foreground="DarkGreen" Margin="0,0,0,5"/>
                     <TextBlock Text="{Binding Desconto, StringFormat='{}Desconto Global: R$ {0:N2}'}" FontSize="14" FontWeight="Bold" Foreground="#E74C3C" Margin="0,0,0,0" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding Acrescimo, StringFormat='{}Acréscimo Global: R$ {0:N2}'}" FontSize="14" FontWeight="Bold" Foreground="#E67E22" Margin="0,0,0,0" HorizontalAlignment="Center"/>
                     <Button Content="(F10) Atualizar Desconto" Height="30" FontSize="12" FontWeight="Bold" Background="#FF9800" Foreground="White" Click="btnDesconto_Click" Margin="0,5,0,0"/>
 
                     <!-- Botões de Ação -->
@@ -83,6 +85,7 @@
                             <DataGridTextColumn Header="V. Unit. (R$)" Binding="{Binding ValorUnitario, StringFormat={}{0:N2}}" Width="100" />
                             <DataGridTextColumn Header="Subtotal (R$)" Binding="{Binding Subtotal, StringFormat={}{0:N2}}" Width="100" />
                             <DataGridTextColumn x:Name="colDesconto" Header="Desconto (R$)" Binding="{Binding Desconto, StringFormat={}{0:N2}}" Width="100" />
+                            <DataGridTextColumn Header="Acréscimo (R$)" Binding="{Binding Acrescimo, StringFormat={}{0:N2}}" Width="100" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
