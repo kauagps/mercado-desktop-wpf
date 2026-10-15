@@ -41,6 +41,16 @@ Single-project WPF desktop app (`mercado.slnx`). .NET 10.0, `net10.0-windows`, W
 - No CI config, no pre-commit hooks, no lint/formatter scripts present.
 - No tests, fixtures, or snapshot workflows.
 
+## Commit Message Convention
+- Use Conventional Commits format: `type(scope): description`
+- Types: `feat`, `fix`, `refactor`, `docs`, `style`, `test`, `chore`, `perf`
+- Scope: area affected (e.g., `PDV`, `Pagamento`, `Estoque`, `Model`, `VM`)
+- Reference issues when applicable: `Closes #XX` or `Refs #XX`
+- Examples:
+  - `feat(PDV): Atalhos de teclado e melhorias no fluxo de venda`
+  - `fix(Model): Correção no cálculo de subtotal com acréscimo`
+  - `refactor(MainWindow): Feedback visual de seleção nos botões de navegação`
+
 ## Documentation (verified from repo structure)
 - System requirements organized by module/epic → `docs/requisitos.md`
 - Epic: `Venda` → requirements: VEN001 (listar), VEN002 (buscar), VEN003 (excluir), VEN004 (devolver), VEN005 (emitir nota não fiscal).

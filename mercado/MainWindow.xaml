@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mercado"
+        xmlns:vm="clr-namespace:mercado.ViewModel"
         mc:Ignorable="d"
         xmlns:viewmodels="clr-namespace:mercado.ViewModel"
         xmlns:views="clr-namespace:mercado.View"
@@ -17,6 +18,43 @@
         <DataTemplate DataType="{x:Type viewmodels:PdvViewModel}">
             <views:PdvView />
         </DataTemplate>
+
+        <!-- Conversor para cor do botão baseado no ViewModel ativo -->
+        <vm:ViewModelToBackgroundConverter x:Key="VmToBackgroundConverter"/>
+
+        <!-- Style for navigation buttons with selection state -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3A5A7A"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#2C3E50"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <DockPanel>
@@ -24,11 +62,13 @@
         <Border DockPanel.Dock="Top" Background="#2C3E50" Height="50" Padding="10, 0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Button Content="ESTOQUE" Command="{Binding NavEstoqueCommand}"
-                        Width="120" Height="35" Margin="0, 0, 10, 0"
-                        Background="#34495E" Foreground="White" BorderThickness="0" Cursor="Hand"></Button>
+                        Style="{StaticResource NavButtonStyle}"
+                        Background="{Binding CurrentViewModel, Converter={StaticResource VmToBackgroundConverter}, ConverterParameter=Estoque}"/>
                 <Button Content="FRENTE DE CAIXA" Command="{Binding NavPdvCommand}"
-                        Width="155" Height="35"
-                        Background="#34495E" Foreground="White" BorderThickness="0" Cursor="Hand"></Button> 
+                        Style="{StaticResource NavButtonStyle}"
+                        Width="155"
+                        Margin="0"
+                        Background="{Binding CurrentViewModel, Converter={StaticResource VmToBackgroundConverter}, ConverterParameter=Pdv}"/> 
             </StackPanel>
         </Border>
         
