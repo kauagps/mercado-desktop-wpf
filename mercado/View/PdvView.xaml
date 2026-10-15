@@ -47,7 +47,7 @@
                         <Run Text="Quantidade:" FontWeight="Bold" FontSize="16" Foreground="#2c3e50" />
                         <Run Text="(Unidade / Kg)" FontSize="12" Foreground="Gray" />
                     </TextBlock>
-                    <TextBox x:Name="txtQuantidade" Text="{Binding QuantidadeAtual}" FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" Margin="0,0,0,15" Padding="5">
+                    <TextBox x:Name="txtQuantidade" Text="{Binding QuantidadeAtual, UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" Margin="0,0,0,15" Padding="5">
                         <i:Interaction.Behaviors>
                             <localBehaviors:ApenasNumerosBehavior>
                             </localBehaviors:ApenasNumerosBehavior>
