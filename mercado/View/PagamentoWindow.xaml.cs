@@ -29,17 +29,77 @@ namespace mercado.View
             _viewModel = new PagamentoViewModel(totalCompra);
             DataContext = _viewModel;
 
+            this.PreviewKeyDown += PagamentoWindow_PreviewKeyDown;
+            this.Loaded += PagamentoWindow_Loaded;
+        }
+
+        private void PagamentoWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             txtValorPagamento.Focus();
             txtValorPagamento.SelectAll();
+        }
+
+        private void PagamentoWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // F1-F4 para selecionar forma de pagamento
+            if (e.Key == Key.F1)
+            {
+                e.Handled = true;
+                SelecionarForma(btnDinheiro);
+            }
+            else if (e.Key == Key.F2)
+            {
+                e.Handled = true;
+                SelecionarForma(btnPix);
+            }
+            else if (e.Key == Key.F3)
+            {
+                e.Handled = true;
+                SelecionarForma(btnCredito);
+            }
+            else if (e.Key == Key.F4)
+            {
+                e.Handled = true;
+                SelecionarForma(btnDebito);
+            }
+
+            // F5 - Finalizar Venda
+            if (e.Key == Key.F5)
+            {
+                e.Handled = true;
+                FinalizarVenda_Click(sender, e);
+            }
+
+            // Esc - Cancelar (fecha a janela com confirmação)
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                this.Close();
+            }
+
+            // Delete - Excluir Último Pagamento
+            if (e.Key == Key.Delete)
+            {
+                e.Handled = true;
+                ExcluirUltimoPagamento();
+            }
+        }
+
+        private void SelecionarForma(Button btn)
+        {
+            if (btn?.Content is string texto)
+            {
+                txtFormaSelecionada.Text = texto.Split('(')[0].Trim();
+                txtValorPagamento.Focus();
+                txtValorPagamento.SelectAll();
+            }
         }
 
         private void SelecionarFormaPagamento_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn)
             {
-                txtFormaSelecionada.Text = btn.Content.ToString();
-                txtValorPagamento.Focus();
-                txtValorPagamento.SelectAll();
+                SelecionarForma(btn);
             }
         }
 
@@ -123,6 +183,24 @@ namespace mercado.View
             else
             {
                 e.Cancel = false;
+            }
+        }
+
+        private void btnExcluirUltimoPagamento_Click(object sender, RoutedEventArgs e)
+        {
+            ExcluirUltimoPagamento();
+        }
+
+        private void ExcluirUltimoPagamento()
+        {
+            if (_viewModel.Pagamentos.Any())
+            {
+                var ultimoPagamento = _viewModel.Pagamentos.Last();
+                _viewModel.RemoverPagamento(ultimoPagamento);
+
+                txtValorPagamento.Text = _viewModel.FaltaPagar.ToString("N2");
+                txtValorPagamento.Focus();
+                txtValorPagamento.SelectAll();
             }
         }
     }

@@ -106,30 +106,83 @@ namespace mercado.View
 
         private void PdvView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            // F2 - Buscar Produto
             if (e.Key == Key.F2)
             {
                 e.Handled = true;
-
                 BuscarProduto_Click(sender, e);
             }
 
+            // F3 - Editar Carrinho
             if (e.Key == Key.F3 || e.SystemKey == Key.F3)
             {
                 e.Handled = true;
                 btnEditarCarrinho_Click(sender, e);
             }
 
+            // Ctrl+A - Alterar Item (Editar Carrinho)
+            if (e.Key == Key.A && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                e.Handled = true;
+                btnEditarCarrinho_Click(sender, e);
+            }
+
+            // Ctrl+Del - Remover Último Item
+            if (e.Key == Key.Delete && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                e.Handled = true;
+                _viewModel.RemoverUltimoItem();
+            }
+
+            // F10 - Desconto
             if (e.Key == Key.F10 || e.SystemKey == Key.F10)
             {
-                
                 e.Handled = true;
                 btnDesconto_Click(sender, e);
             }
 
+            // + (mais) - Acréscimo
             if (e.Key == Key.OemPlus || e.Key == Key.Add)
             {
                 e.Handled = true;
                 btnAcrescimo_Click(sender, e);
+            }
+
+            // F4 - Finalizar Compra
+            if (e.Key == Key.F4)
+            {
+                e.Handled = true;
+                FinalizarCompra_Click(sender, e);
+            }
+
+            // Esc - Cancelar Venda
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                CancelarCompra_Click(sender, e);
+            }
+
+            // Ctrl+P - Consultar Produto (Buscar)
+            if (e.Key == Key.P && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                e.Handled = true;
+                BuscarProduto_Click(sender, e);
+            }
+
+            // F7 - Vendas (placeholder)
+            if (e.Key == Key.F7)
+            {
+                e.Handled = true;
+                // TODO: Implementar tela de histórico de vendas
+                MessageBox.Show("Funcionalidade 'Vendas' (F7) será implementada em breve.", "Em Desenvolvimento", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            // F8 - Focar campo Quantidade
+            if (e.Key == Key.F8)
+            {
+                e.Handled = true;
+                txtQuantidade.Focus();
+                txtQuantidade.SelectAll();
             }
         }
 
@@ -224,6 +277,17 @@ namespace mercado.View
                 _viewModel.Acrescimo = telaAcrescimo.ValorDigitado;
                 _viewModel.CalcularTotal();
             }
+        }
+
+        private void btnExcluirUltimo_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.RemoverUltimoItem();
+        }
+
+        private void btnFocarQuantidade_Click(object sender, RoutedEventArgs e)
+        {
+            txtQuantidade.Focus();
+            txtQuantidade.SelectAll();
         }
     }
 }

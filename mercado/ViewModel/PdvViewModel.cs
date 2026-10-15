@@ -230,6 +230,15 @@ namespace mercado.ViewModel
             CalcularTotal();
         }
 
+        public void RemoverUltimoItem()
+        {
+            if (Carrinho.Any())
+            {
+                Carrinho.RemoveAt(Carrinho.Count - 1);
+                CalcularTotal();
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

@@ -17,10 +17,18 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0, 0, 0, 10">
-            <Button Content="(F2) - Buscar Produto" Height="35" Width="auto" Margin="0,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="Aqua" Click="BuscarProduto_Click"/>
-            <Button Content="(F10) - Desconto" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="Aqua" Click="btnDesconto_Click"/>
-            <Button Content="(+) - Acréscimo" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#FF9800" Click="btnAcrescimo_Click"/>
-            <Button Content="(F3) - Editar Carrinho" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#FF9800" Click="btnEditarCarrinho_Click"/>
+            <Button Content="(F2) - Buscar Produto" Height="35" Width="auto" Margin="0,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="Aqua" Click="BuscarProduto_Click"
+                    ToolTip="Buscar Produto (F2 ou Ctrl+P)"/>
+            <Button Content="(F10) - Desconto" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="Aqua" Click="btnDesconto_Click"
+                    ToolTip="Desconto Global (F10)"/>
+            <Button Content="(+) - Acréscimo" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#FF9800" Click="btnAcrescimo_Click"
+                    ToolTip="Acréscimo Global (Tecla +)"/>
+            <Button Content="(F3) - Editar Carrinho" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#FF9800" Click="btnEditarCarrinho_Click"
+                    ToolTip="Editar Carrinho (F3 ou Ctrl+A)"/>
+            <Button Content="(Ctrl+Del) - Excluir Último" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#E74C3C" Foreground="White" Click="btnExcluirUltimo_Click"
+                    ToolTip="Excluir Último Item do Carrinho (Ctrl+Del)"/>
+            <Button Content="(F8) - Quantidade" Height="35" Width="auto" Margin="10,10,0,0" HorizontalAlignment="Right" FontSize="16" FontWeight="SemiBold" Background="#3498DB" Foreground="White" Click="btnFocarQuantidade_Click"
+                    ToolTip="Focar Campo Quantidade (F8)"/>
         </StackPanel>
 
         <Grid Grid.Row="1">
@@ -39,12 +47,13 @@
                         <Run Text="Quantidade:" FontWeight="Bold" FontSize="16" Foreground="#2c3e50" />
                         <Run Text="(Unidade / Kg)" FontSize="12" Foreground="Gray" />
                     </TextBlock>
-                    <TextBox Text="{Binding QuantidadeAtual}" FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" Margin="0,0,0,15" Padding="5">
+                    <TextBox x:Name="txtQuantidade" Text="{Binding QuantidadeAtual}" FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" Margin="0,0,0,15" Padding="5">
                         <i:Interaction.Behaviors>
                             <localBehaviors:ApenasNumerosBehavior>
                             </localBehaviors:ApenasNumerosBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
+                    <TextBlock Text="Para seguir para leitura de codigo do produto, aperte TAB" FontSize="12" Foreground="Gray" />
 
                     <!-- O CAMPO MÁGICO DO LEITOR -->
                     <TextBlock Text="Código de Barras:" FontWeight="Bold" Margin="0,0,0,5" />
@@ -61,11 +70,12 @@
                     <TextBlock Text="{Binding TotalCompra, StringFormat='{}R$ {0:N2}'}" FontSize="45" FontWeight="Black" Foreground="DarkGreen" Margin="0,0,0,5"/>
                     <TextBlock Text="{Binding Desconto, StringFormat='{}Desconto Global: R$ {0:N2}'}" FontSize="14" FontWeight="Bold" Foreground="#E74C3C" Margin="0,0,0,0" HorizontalAlignment="Center"/>
                     <TextBlock Text="{Binding Acrescimo, StringFormat='{}Acréscimo Global: R$ {0:N2}'}" FontSize="14" FontWeight="Bold" Foreground="#E67E22" Margin="0,0,0,0" HorizontalAlignment="Center"/>
-                    <Button Content="(F10) Atualizar Desconto" Height="30" FontSize="12" FontWeight="Bold" Background="#FF9800" Foreground="White" Click="btnDesconto_Click" Margin="0,5,0,0"/>
 
                     <!-- Botões de Ação -->
-                    <Button Content="Finalizar Compra" Height="60" FontSize="20" FontWeight="Bold" Background="LightGreen" Click="FinalizarCompra_Click"/>
-                    <Button Content="Cancelar Venda" Height="40" FontSize="16" FontWeight="Bold" Background="LightCoral" Margin="0,10,0,0" Click="CancelarCompra_Click"/>
+                    <Button Content="Finalizar Compra (F4)" Height="60" FontSize="20" FontWeight="Bold" Background="LightGreen" Click="FinalizarCompra_Click"
+                            ToolTip="Finalizar Compra e Ir para Pagamento (F4)"/>
+                    <Button Content="Cancelar Venda (Esc)" Height="40" FontSize="16" FontWeight="Bold" Background="LightCoral" Margin="0,10,0,0" Click="CancelarCompra_Click"
+                            ToolTip="Cancelar Venda Atual (Esc)"/>
                 </StackPanel>
             </Border>
 
