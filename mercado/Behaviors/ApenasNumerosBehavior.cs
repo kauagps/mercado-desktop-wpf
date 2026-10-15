@@ -31,6 +31,15 @@ namespace mercado.Behaviors
 
         private void OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
+            var textBox = sender as TextBox;
+            
+            // Permitir apenas um ponto
+            if (e.Text == "." && textBox?.Text.Contains(".") == true)
+            {
+                e.Handled = true;
+                return;
+            }
+            
             Regex regex = new Regex("[^0-9.]+");
             e.Handled = regex.IsMatch(e.Text);
         }
@@ -41,6 +50,15 @@ namespace mercado.Behaviors
             {
                 e.Handled = true;
             }
+            
+            // Bloquear Ctrl+C e Ctrl+V
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                if (e.Key == Key.C || e.Key == Key.V)
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         private void OnPasting(object sender, DataObjectPastingEventArgs e)
@@ -48,8 +66,18 @@ namespace mercado.Behaviors
             if (e.DataObject.GetDataPresent(typeof(string)))
             {
                 string text = (string)e.DataObject.GetData(typeof(string));
+                var textBox = sender as TextBox;
+                
+                // Validar apenas números e no máximo um ponto
                 Regex regex = new Regex("[^0-9.]+");
                 if (regex.IsMatch(text))
+                {
+                    e.CancelCommand();
+                    return;
+                }
+                
+                // Verificar se já tem ponto e o texto colado também tem
+                if (textBox?.Text.Contains(".") == true && text.Contains("."))
                 {
                     e.CancelCommand();
                 }

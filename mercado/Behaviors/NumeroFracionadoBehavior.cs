@@ -17,12 +17,16 @@ namespace mercado.Behaviors
         {
             base.OnAttached();
             AssociatedObject.PreviewTextInput += AssociatedObject_PreviewTextInput;
+            AssociatedObject.PreviewKeyDown += OnPreviewKeyDown;
+            DataObject.AddPastingHandler(AssociatedObject, OnPasting);
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
             AssociatedObject.PreviewTextInput -= AssociatedObject_PreviewTextInput;
+            AssociatedObject.PreviewKeyDown -= OnPreviewKeyDown;
+            DataObject.RemovePastingHandler(AssociatedObject, OnPasting);
         }
 
         private void AssociatedObject_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -46,11 +50,63 @@ namespace mercado.Behaviors
             else
             {
                 // MODO INTEIRO: Aceita apenas números puros
-                Regex regex = new Regex("[^0-9]+");
+                Regex regex = new Regex("[^0-9]+"); 
                 e.Handled = regex.IsMatch(e.Text);
             }
-
         }
 
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void OnPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                string text = (string)e.DataObject.GetData(typeof(string));
+                var textBox = sender as TextBox;
+                
+                if (textBox == null)
+                {
+                    e.CancelCommand();
+                    return;
+                }
+                
+                bool permiteFracionado = (textBox.Tag is bool b && b) || (textBox.Tag?.ToString() == "True");
+                
+                if (permiteFracionado)
+                {
+                    Regex regex = new Regex("[^0-9.]+");
+                    if (regex.IsMatch(text))
+                    {
+                        e.CancelCommand();
+                        return;
+                    }
+                    
+                    // Verificar se já tem ponto e o texto colado também tem
+                    if (textBox.Text.Contains(".") && text.Contains("."))
+                    {
+                        e.CancelCommand();
+                    }
+                }
+                else
+                {
+                    // Modo inteiro: só números
+                    Regex regex = new Regex("[^0-9]+");
+                    if (regex.IsMatch(text))
+                    {
+                        e.CancelCommand();
+                    }
+                }
+            }
+            else
+            {
+                e.CancelCommand();
+            }
+        }
     }
 }
