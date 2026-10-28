@@ -18,9 +18,19 @@
         <DataTemplate DataType="{x:Type viewmodels:PdvViewModel}">
             <views:PdvView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:UsuariosViewModel}">
+            <views:UsuariosView />
+        </DataTemplate>
 
-        <!-- Conversor para cor do botão baseado no ViewModel ativo -->
+        <!-- Conversores -->
         <vm:ViewModelToBackgroundConverter x:Key="VmToBackgroundConverter"/>
+        <vm:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <vm:BoolToStatusColorConverter x:Key="BoolToStatusColorConverter"/>
+        <vm:BoolToStatusTextConverter x:Key="BoolToStatusTextConverter"/>
+        <vm:BoolToToggleTextConverter x:Key="BoolToToggleTextConverter"/>
+        <vm:BoolToToggleBgConverter x:Key="BoolToToggleBgConverter"/>
+        <vm:BoolToToggleFgConverter x:Key="BoolToToggleFgConverter"/>
+        <vm:UsuarioPodeExcluirConverter x:Key="UsuarioPodeExcluirConverter"/>
 
         <!-- Style for navigation buttons with selection state -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
@@ -55,21 +65,81 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Style for the logout button (red action) -->
+        <Style x:Key="LogoutButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#A93226"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <DockPanel>
 
         <Border DockPanel.Dock="Top" Background="#2C3E50" Height="50" Padding="10, 0">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Content="ESTOQUE" Command="{Binding NavEstoqueCommand}"
-                        Style="{StaticResource NavButtonStyle}"
-                        Background="{Binding CurrentViewModel, Converter={StaticResource VmToBackgroundConverter}, ConverterParameter=Estoque}"/>
-                <Button Content="FRENTE DE CAIXA" Command="{Binding NavPdvCommand}"
-                        Style="{StaticResource NavButtonStyle}"
-                        Width="155"
-                        Margin="0"
-                        Background="{Binding CurrentViewModel, Converter={StaticResource VmToBackgroundConverter}, ConverterParameter=Pdv}"/> 
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Navegação (esquerda) -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="ESTOQUE" Command="{Binding NavEstoqueCommand}"
+                            Style="{StaticResource NavButtonStyle}"
+                            Background="{Binding CurrentViewModel, Converter={StaticResource VmToBackgroundConverter}, ConverterParameter=Estoque}"/>
+                    <Button Content="FRENTE DE CAIXA" Command="{Binding NavPdvCommand}"
+                            Style="{StaticResource NavButtonStyle}"
+                            Width="155"
+                            Margin="0"
+                            Background="{Binding CurrentViewModel, Converter={StaticResource VmToBackgroundConverter}, ConverterParameter=Pdv}"/>
+                    <Button Content="USUÁRIOS" Command="{Binding NavUsuariosCommand}"
+                            Style="{StaticResource NavButtonStyle}"
+                            Width="120"
+                            Background="{Binding CurrentViewModel, Converter={StaticResource VmToBackgroundConverter}, ConverterParameter=Usuarios}"
+                            Visibility="{Binding EhAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </StackPanel>
+
+                <!-- Usuário logado + Logout (direita) -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding UsuarioLogado.Nome}"
+                               Foreground="White"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="0,0,12,0"/>
+                    <Button Content="SAIR"
+                            Command="{Binding LogoutCommand}"
+                            Style="{StaticResource LogoutButtonStyle}"
+                            Background="#E74C3C"/>
+                </StackPanel>
+            </Grid>
         </Border>
         
         <ContentControl Content="{Binding CurrentViewModel}" Margin="10"/>

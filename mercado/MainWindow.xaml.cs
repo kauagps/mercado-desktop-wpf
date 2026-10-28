@@ -1,4 +1,5 @@
-﻿using mercado.ViewModel;
+﻿using mercado.Model;
+using mercado.ViewModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,11 +19,11 @@ namespace mercado
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(Usuario usuarioLogado)
         {
             InitializeComponent();
 
-            this.DataContext = new MainViewModel();
+            this.DataContext = new MainViewModel(usuarioLogado);
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

@@ -129,6 +129,49 @@ namespace mercado.Migrations
                     b.ToTable("Produtos");
                 });
 
+            modelBuilder.Entity("mercado.Model.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Ativo = true,
+                            DataCriacao = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Nome = "admin",
+                            SenhaHash = "$2a$11$7jk9L7TvgE2tvoVIvZdWLebEiZLLlE2ieDyB1NzqbZ5kFfIOW4gcG",
+                            Tipo = 1
+                        });
+                });
+
             modelBuilder.Entity("mercado.Model.Venda", b =>
                 {
                     b.Property<int>("Id")

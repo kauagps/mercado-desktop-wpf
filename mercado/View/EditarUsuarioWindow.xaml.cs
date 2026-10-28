@@ -1,0 +1,131 @@
+using mercado.Service;
+using System;
+using System.Windows;
+using System.Windows.Controls;
+using mercado.Model;
+
+namespace mercado.View
+{
+    public partial class EditarUsuarioWindow : Window
+    {
+        private Usuario _usuarioOriginal;
+        private Usuario _usuarioClone;
+        private UsuarioService _usuarioService;
+
+        public EditarUsuarioWindow(Usuario usuario)
+        {
+            InitializeComponent();
+
+            _usuarioService = new UsuarioService();
+            _usuarioOriginal = usuario;
+
+            _usuarioClone = new Usuario
+            {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                Tipo = usuario.Tipo,
+                SenhaHash = usuario.SenhaHash, // Hash original (será mantido se não alterar senha)
+                Ativo = usuario.Ativo,
+                DataCriacao = usuario.DataCriacao
+            };
+
+            DataContext = _usuarioClone;
+        }
+
+        private void btnSalvar_Click(object sender, RoutedEventArgs e)
+        {
+            string novaSenha = txtNovaSenha.Password;
+            string confirmarSenha = txtConfirmarNovaSenha.Password;
+
+            // Validação de senha se foi preenchida
+            if (!string.IsNullOrWhiteSpace(novaSenha) || !string.IsNullOrWhiteSpace(confirmarSenha))
+            {
+                if (string.IsNullOrWhiteSpace(novaSenha) || string.IsNullOrWhiteSpace(confirmarSenha))
+                {
+                    MessageBox.Show(
+                        "Por favor, preencha ambos os campos de senha ou deixe ambos em branco.",
+                        "Senha Incompleta",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (novaSenha != confirmarSenha)
+                {
+                    MessageBox.Show(
+                        "As senhas não coincidem.",
+                        "Senhas Diferentes",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Atualizar senha no clone (será hasheada no service)
+                _usuarioClone.SenhaHash = novaSenha;
+            }
+
+            // Validação de campos obrigatórios
+            if (string.IsNullOrWhiteSpace(_usuarioClone.Nome))
+            {
+                MessageBox.Show(
+                    "Por favor, preencha o Nome.",
+                    "Campo Obrigatório",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            // Verificar nome duplicado
+            if (_usuarioService.NomeJaExiste(_usuarioClone.Nome, _usuarioClone.Id))
+            {
+                MessageBox.Show(
+                    "Já existe outro usuário com este nome!",
+                    "Nome Duplicado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                // Atualizar usuário original com dados do clone
+                _usuarioOriginal.Nome = _usuarioClone.Nome;
+                _usuarioOriginal.Tipo = _usuarioClone.Tipo;
+                _usuarioOriginal.SenhaHash = _usuarioClone.SenhaHash; // Será hasheada no service se alterada
+                _usuarioOriginal.Ativo = _usuarioClone.Ativo;
+
+                _usuarioService.AtualizarUsuario(_usuarioOriginal);
+
+                MessageBox.Show("Usuário atualizado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao atualizar usuário: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btnCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult resposta = MessageBox.Show(
+                "Tem certeza que deseja cancelar a operação e fechar a tela?",
+                "Confirmação de Cancelamento",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (resposta == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                e.Cancel = false;
+            }
+        }
+    }
+}

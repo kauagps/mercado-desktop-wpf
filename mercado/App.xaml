@@ -2,14 +2,23 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:mercado"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="MainWindow.xaml">
+             xmlns:vm="clr-namespace:mercado.ViewModel"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Conversores globais -->
+            <vm:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <vm:BoolToStatusColorConverter x:Key="BoolToStatusColorConverter"/>
+            <vm:BoolToStatusTextConverter x:Key="BoolToStatusTextConverter"/>
+            <vm:BoolToToggleTextConverter x:Key="BoolToToggleTextConverter"/>
+            <vm:BoolToToggleBgConverter x:Key="BoolToToggleBgConverter"/>
+            <vm:BoolToToggleFgConverter x:Key="BoolToToggleFgConverter"/>
+            <vm:UsuarioPodeExcluirConverter x:Key="UsuarioPodeExcluirConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

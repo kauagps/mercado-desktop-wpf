@@ -1,0 +1,64 @@
+<Window x:Class="mercado.View.EditarUsuarioWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mercado.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:model="clr-namespace:mercado.Model"
+        mc:Ignorable="d"
+        Title="Editar Usuário" Height="450" Width="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#fcf8f2"
+        Style="{StaticResource MaterialDesignWindow}"
+        Closing="Window_Closing">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="TipoUsuarioValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="model:TipoUsuario"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid Margin="20">
+        <StackPanel>
+            <!--Titulo-->
+            <TextBlock Text="Editar Usuário" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+            <!--Nome do Usuário-->
+            <TextBlock Text="* Nome do Usuário:"/>
+            <TextBox Text="{Binding Nome, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Padding="2"/>
+
+            <!--Tipo-->
+            <TextBlock Text="* Tipo:"/>
+            <ComboBox Margin="0,0,0,10" Padding="2"
+                  ItemsSource="{Binding Source={StaticResource TipoUsuarioValues}}"
+                  SelectedItem="{Binding Tipo, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!--Senha (opcional na edição)-->
+            <TextBlock Text="Nova Senha (deixe em branco para não alterar):"/>
+            <PasswordBox x:Name="txtNovaSenha" Margin="0,0,0,10" Padding="2"/>
+
+            <!--Confirmar Nova Senha-->
+            <TextBlock Text="Confirmar Nova Senha:"/>
+            <PasswordBox x:Name="txtConfirmarNovaSenha" Margin="0,0,0,10" Padding="2"/>
+
+            <!--Ativo-->
+            <CheckBox Content="Usuário Ativo" Margin="0, 0, 0, 10" 
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding Ativo}"/>
+
+            <!--Cancelar ou Salvar Alterações-->
+            <Grid HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="Cancelar" Margin="0,0,5,0" Padding="10,5" Click="btnCancelar_Click" Background="Red" Foreground="White" BorderThickness="0"/>
+                <Button Grid.Column="1" Content="Salvar Alterações" Margin="5,0,0,0" Padding="10,5" Click="btnSalvar_Click" Background="LightGreen" BorderThickness="0"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
