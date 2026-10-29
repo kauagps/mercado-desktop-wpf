@@ -43,7 +43,7 @@ namespace mercado.ViewModel
 
             EstoqueVM = new EstoqueViewModel();
             PdvVM = new PdvViewModel();
-            UsuariosVM = new UsuariosViewModel(usuarioLogado.Id);
+            UsuariosVM = new UsuariosViewModel(usuarioLogado.Id, AtualizarUsuarioLogado);
 
             NavEstoqueCommand = new RelayCommand(_ => NavegarParaEstoque());
             NavPdvCommand = new RelayCommand(_ => NavegarParaPdv());
@@ -51,6 +51,17 @@ namespace mercado.ViewModel
             LogoutCommand = new RelayCommand(_ => Logout());
 
             CurrentViewModel = EstoqueVM;
+        }
+
+        /// <summary>
+        /// Atualiza a instância do usuário logado após uma edição do próprio cadastro,
+        /// para refletir o novo nome no cabeçalho da janela principal.
+        /// </summary>
+        private void AtualizarUsuarioLogado(Usuario usuarioAtualizado)
+        {
+            UsuarioLogado = usuarioAtualizado;
+            OnPropertyChanged(nameof(UsuarioLogado));
+            OnPropertyChanged(nameof(EhAdmin));
         }
 
         public void NavegarParaEstoque()

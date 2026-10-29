@@ -15,6 +15,7 @@ namespace mercado.ViewModel
     {
         private readonly UsuarioService _usuarioService;
         private readonly int _usuarioLogadoId;
+        private readonly Action<Usuario>? _aoAtualizarUsuarioLogado;
         private ObservableCollection<UsuarioItemViewModel> _usuariosLista = new ObservableCollection<UsuarioItemViewModel>();
         private Usuario _novoUsuario = new Usuario();
 
@@ -100,10 +101,11 @@ namespace mercado.ViewModel
         public ICommand InativarUsuarioCommand { get; set; }
         public ICommand ExcluirUsuarioCommand { get; set; }
 
-        public UsuariosViewModel(int usuarioLogadoId)
+        public UsuariosViewModel(int usuarioLogadoId, Action<Usuario>? aoAtualizarUsuarioLogado = null)
         {
             _usuarioService = new UsuarioService();
             _usuarioLogadoId = usuarioLogadoId;
+            _aoAtualizarUsuarioLogado = aoAtualizarUsuarioLogado;
             NovoUsuario = new Usuario();
             UsuariosLista = new ObservableCollection<UsuarioItemViewModel>();
 
@@ -141,6 +143,16 @@ namespace mercado.ViewModel
             {
                 var janelaEdicao = new View.EditarUsuarioWindow(usuarioSelecionado, _usuarioLogadoId);
                 janelaEdicao.ShowDialog();
+
+                // Se o próprio usuário logado foi editado com sucesso, atualiza
+                // a instância usada pelo cabeçalho da janela principal.
+                if (usuarioSelecionado.Id == _usuarioLogadoId && janelaEdicao.AlteracaoSalva)
+                {
+                    var usuarioAtualizado = _usuarioService.BuscarPorId(_usuarioLogadoId);
+                    if (usuarioAtualizado != null)
+                        _aoAtualizarUsuarioLogado?.Invoke(usuarioAtualizado);
+                }
+
                 CarregarUsuarios();
             }
         }

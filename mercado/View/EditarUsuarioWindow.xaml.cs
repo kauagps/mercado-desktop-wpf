@@ -14,6 +14,11 @@ namespace mercado.View
         private UsuarioService _usuarioService;
         private bool _alteracaoSalva;
 
+        /// <summary>
+        /// Indica se a edição foi persistida com sucesso antes da janela fechar.
+        /// </summary>
+        public bool AlteracaoSalva => _alteracaoSalva;
+
         public EditarUsuarioWindow(Usuario usuario, int usuarioLogadoId)
         {
             InitializeComponent();
