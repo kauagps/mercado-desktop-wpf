@@ -156,10 +156,24 @@ namespace mercado.ViewModel
 
                 if (resposta == MessageBoxResult.Yes)
                 {
-                    usuarioSelecionado.Ativo = !usuarioSelecionado.Ativo;
-                    _usuarioService.AtualizarUsuario(usuarioSelecionado);
-                    CarregarUsuarios();
-                    MessageBox.Show($"Usuário {usuarioSelecionado.Nome} {(usuarioSelecionado.Ativo ? "ativado" : "inativado")} com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    try
+                    {
+                        usuarioSelecionado.Ativo = !usuarioSelecionado.Ativo;
+                        _usuarioService.AtualizarUsuario(usuarioSelecionado);
+                        CarregarUsuarios();
+                        MessageBox.Show($"Usuário {usuarioSelecionado.Nome} {(usuarioSelecionado.Ativo ? "ativado" : "inativado")} com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Recarrega para descartar a alteração local que foi bloqueada
+                        CarregarUsuarios();
+                        MessageBox.Show(ex.Message, "Ação Bloqueada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    catch (Exception ex)
+                    {
+                        CarregarUsuarios();
+                        MessageBox.Show($"Erro ao atualizar usuário: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
@@ -183,9 +197,22 @@ namespace mercado.ViewModel
 
                 if (resposta == MessageBoxResult.Yes)
                 {
-                    _usuarioService.ExcluirUsuario(usuarioSelecionado);
-                    CarregarUsuarios();
-                    MessageBox.Show($"Usuário {usuarioSelecionado.Nome} excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    try
+                    {
+                        _usuarioService.ExcluirUsuario(usuarioSelecionado);
+                        CarregarUsuarios();
+                        MessageBox.Show($"Usuário {usuarioSelecionado.Nome} excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        CarregarUsuarios();
+                        MessageBox.Show(ex.Message, "Ação Bloqueada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    catch (Exception ex)
+                    {
+                        CarregarUsuarios();
+                        MessageBox.Show($"Erro ao excluir usuário: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }

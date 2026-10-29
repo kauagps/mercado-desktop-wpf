@@ -76,6 +76,9 @@ namespace mercado.Service
             if (NomeJaExiste(usuario.Nome, usuario.Id))
                 throw new InvalidOperationException("Já existe outro usuário com este nome.");
 
+            // BR-05: não permitir inativar ou rebaixar o último administrador ativo
+            ValidarPeloMenosUmAdminAtivo(usuarioExistente, usuario.Tipo, usuario.Ativo);
+
             // Se senha foi alterada (não está vazia e não é o hash atual), hashear nova senha
             if (!string.IsNullOrWhiteSpace(usuario.SenhaHash) && usuario.SenhaHash != usuarioExistente.SenhaHash)
             {
@@ -105,18 +108,38 @@ namespace mercado.Service
             if (usuarioExistente == null)
                 throw new InvalidOperationException("Usuário não encontrado.");
 
-            // BR-05: Não permitir excluir o último administrador ativo
-            if (usuarioExistente.Tipo == TipoUsuario.Administrador && usuarioExistente.Ativo)
-            {
-                int adminsAtivos = _context.Usuarios.Count(u => u.Tipo == TipoUsuario.Administrador && u.Ativo);
-                if (adminsAtivos <= 1)
-                {
-                    throw new InvalidOperationException("Não é possível excluir o último administrador ativo do sistema.");
-                }
-            }
+            // BR-05: não permitir excluir o último administrador ativo
+            ValidarPeloMenosUmAdminAtivo(usuarioExistente, usuarioExistente.Tipo, false);
 
             _context.Usuarios.Remove(usuarioExistente);
             _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// BR-05: garante que sempre exista pelo menos um administrador ativo.
+        /// A validação considera a situação atual no banco e o novo estado desejado.
+        /// </summary>
+        private void ValidarPeloMenosUmAdminAtivo(Usuario usuarioExistente, TipoUsuario novoTipo, bool novoAtivo)
+        {
+            // A restrição só se aplica quando o usuário era administrador ativo
+            // e deixará de ser (inativação, rebaixamento ou exclusão).
+            if (usuarioExistente.Tipo != TipoUsuario.Administrador || !usuarioExistente.Ativo)
+                return;
+
+            bool continuaraAdminAtivo = novoTipo == TipoUsuario.Administrador && novoAtivo;
+            if (continuaraAdminAtivo)
+                return;
+
+            bool existeOutroAdminAtivo = _context.Usuarios.Any(u =>
+                u.Id != usuarioExistente.Id &&
+                u.Tipo == TipoUsuario.Administrador &&
+                u.Ativo);
+
+            if (!existeOutroAdminAtivo)
+            {
+                throw new InvalidOperationException(
+                    "Não é possível inativar, rebaixar ou excluir o último administrador ativo do sistema.");
+            }
         }
 
         public Usuario? Autenticar(string nome, string senha)
