@@ -15,10 +15,10 @@ namespace mercado.ViewModel
     {
         private readonly UsuarioService _usuarioService;
         private readonly int _usuarioLogadoId;
-        private ObservableCollection<Usuario> _usuariosLista = new ObservableCollection<Usuario>();
+        private ObservableCollection<UsuarioItemViewModel> _usuariosLista = new ObservableCollection<UsuarioItemViewModel>();
         private Usuario _novoUsuario = new Usuario();
 
-        public ObservableCollection<Usuario> UsuariosLista
+        public ObservableCollection<UsuarioItemViewModel> UsuariosLista
         {
             get { return _usuariosLista; }
             set { _usuariosLista = value; onPropertyChanged(nameof(UsuariosLista)); }
@@ -105,7 +105,7 @@ namespace mercado.ViewModel
             _usuarioService = new UsuarioService();
             _usuarioLogadoId = usuarioLogadoId;
             NovoUsuario = new Usuario();
-            UsuariosLista = new ObservableCollection<Usuario>();
+            UsuariosLista = new ObservableCollection<UsuarioItemViewModel>();
 
             AdicionarUsuarioCommand = new RelayCommand(_ => SalvarNovoUsuario());
             EditarUsuarioCommand = new RelayCommand(AbrirTelaEdicao);
@@ -251,7 +251,12 @@ namespace mercado.ViewModel
 
         private void CarregarUsuarios()
         {
-            var listaDoBanco = _usuarioService.ListarTodos();
+            var todosUsuarios = _usuarioService.ListarTodos();
+
+            // Calcula os administradores ativos sobre a lista completa, não sobre o filtro.
+            int totalAdminsAtivos = todosUsuarios.Count(u => u.Tipo == TipoUsuario.Administrador && u.Ativo);
+
+            var listaDoBanco = todosUsuarios;
 
             if (!string.IsNullOrWhiteSpace(TextoBusca))
             {
@@ -265,7 +270,7 @@ namespace mercado.ViewModel
             if (TotalItens == 0)
             {
                 TotalPaginas = 1;
-                UsuariosLista = new ObservableCollection<Usuario>();
+                UsuariosLista = new ObservableCollection<UsuarioItemViewModel>();
                 return;
             }
 
@@ -280,9 +285,10 @@ namespace mercado.ViewModel
                 .OrderBy(u => u.Nome)
                 .Skip((PaginaAtual - 1) * ItensPorPagina)
                 .Take(ItensPorPagina)
+                .Select(u => new UsuarioItemViewModel(u, _usuarioLogadoId, totalAdminsAtivos))
                 .ToList();
 
-            UsuariosLista = new ObservableCollection<Usuario>(itensPaginados);
+            UsuariosLista = new ObservableCollection<UsuarioItemViewModel>(itensPaginados);
         }
 
         public bool SalvarNovoUsuario()

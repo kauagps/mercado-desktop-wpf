@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:model="clr-namespace:mercado.Model"
         mc:Ignorable="d"
-        Title="Editar Usuário" Height="450" Width="400"
+        Title="Editar Usuário" Height="510" Width="400"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="#fcf8f2"
@@ -25,13 +25,22 @@
             <!--Titulo-->
             <TextBlock Text="Editar Usuário" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
 
+            <!--Aviso ao editar o próprio usuário-->
+            <Border x:Name="borderAvisoProprioUsuario"
+                    Background="#FFF3CD" BorderBrush="#FFECB5" BorderThickness="1"
+                    CornerRadius="4" Padding="8" Margin="0,0,0,12"
+                    Visibility="Collapsed">
+                <TextBlock Text="Você está editando o próprio usuário. O tipo e o status não podem ser alterados."
+                           TextWrapping="Wrap" Foreground="#856404" FontSize="12"/>
+            </Border>
+
             <!--Nome do Usuário-->
             <TextBlock Text="* Nome do Usuário:"/>
             <TextBox Text="{Binding Nome, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Padding="2"/>
 
             <!--Tipo-->
             <TextBlock Text="* Tipo:"/>
-            <ComboBox Margin="0,0,0,10" Padding="2"
+            <ComboBox x:Name="cmbTipo" Margin="0,0,0,10" Padding="2"
                   ItemsSource="{Binding Source={StaticResource TipoUsuarioValues}}"
                   SelectedItem="{Binding Tipo, UpdateSourceTrigger=PropertyChanged}"/>
 
@@ -44,7 +53,7 @@
             <PasswordBox x:Name="txtConfirmarNovaSenha" Margin="0,0,0,10" Padding="2"/>
 
             <!--Ativo-->
-            <CheckBox Content="Usuário Ativo" Margin="0, 0, 0, 10" 
+            <CheckBox x:Name="chkAtivo" Content="Usuário Ativo" Margin="0, 0, 0, 10" 
                       HorizontalAlignment="Left"
                       VerticalAlignment="Center"
                       IsChecked="{Binding Ativo}"/>

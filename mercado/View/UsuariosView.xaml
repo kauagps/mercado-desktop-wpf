@@ -157,31 +157,25 @@
                                         <!--Editar-->
                                         <Button Content="Editar" Width="70" Margin="2" Background="LightBlue"
                                         Command="{Binding DataContext.EditarUsuarioCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                        CommandParameter="{Binding}" />
+                                        CommandParameter="{Binding Usuario}" />
 
                                         <!--Inativar/Ativar-->
                                         <Button Content="{Binding Ativo, Converter={StaticResource BoolToToggleTextConverter}}" Width="80" Margin="2" 
                                                 Background="{Binding Ativo, Converter={StaticResource BoolToToggleBgConverter}}"
                                                 Foreground="{Binding Ativo, Converter={StaticResource BoolToToggleFgConverter}}"
                                         Command="{Binding DataContext.InativarUsuarioCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                        CommandParameter="{Binding}" />
+                                        CommandParameter="{Binding Usuario}"
+                                        IsEnabled="{Binding PodeInativar}"
+                                        ToolTip="{Binding ToolTipInativar}"
+                                        ToolTipService.ShowOnDisabled="True" />
 
                                         <!--Excluir-->
                                         <Button Content="Excluir" Width="75" Margin="2" Background="LightCoral"
                                         Command="{Binding DataContext.ExcluirUsuarioCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                        CommandParameter="{Binding}"
-                                        IsEnabled="{Binding DataContext.PodeExcluir, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource UsuarioPodeExcluirConverter}}">
-                                            <Button.ToolTip>
-                                                <ToolTip>
-                                                    <ToolTip.Content>
-                                                        <TextBlock>
-                                                            <Run Text="Excluir este usuário"/>
-                                                            <Run Text=" (bloqueado se for último admin)" Foreground="Gray" FontStyle="Italic"/>
-                                                        </TextBlock>
-                                                    </ToolTip.Content>
-                                                </ToolTip>
-                                            </Button.ToolTip>
-                                        </Button>
+                                        CommandParameter="{Binding Usuario}"
+                                        IsEnabled="{Binding PodeExcluir}"
+                                        ToolTip="{Binding ToolTipExcluir}"
+                                        ToolTipService.ShowOnDisabled="True" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

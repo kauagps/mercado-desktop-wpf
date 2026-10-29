@@ -18,7 +18,6 @@
             <vm:BoolToToggleTextConverter x:Key="BoolToToggleTextConverter"/>
             <vm:BoolToToggleBgConverter x:Key="BoolToToggleBgConverter"/>
             <vm:BoolToToggleFgConverter x:Key="BoolToToggleFgConverter"/>
-            <vm:UsuarioPodeExcluirConverter x:Key="UsuarioPodeExcluirConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

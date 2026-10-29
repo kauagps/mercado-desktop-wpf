@@ -30,7 +30,6 @@
         <vm:BoolToToggleTextConverter x:Key="BoolToToggleTextConverter"/>
         <vm:BoolToToggleBgConverter x:Key="BoolToToggleBgConverter"/>
         <vm:BoolToToggleFgConverter x:Key="BoolToToggleFgConverter"/>
-        <vm:UsuarioPodeExcluirConverter x:Key="UsuarioPodeExcluirConverter"/>
 
         <!-- Style for navigation buttons with selection state -->
         <Style x:Key="NavButtonStyle" TargetType="Button">

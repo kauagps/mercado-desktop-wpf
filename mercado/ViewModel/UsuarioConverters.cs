@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using mercado.Model;
 
 namespace mercado.ViewModel
 {
@@ -99,33 +98,6 @@ namespace mercado.ViewModel
                 return ativo ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
             }
             return new SolidColorBrush(Colors.Black);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    /// <summary>
-    /// Converte Usuario para bool indicando se pode ser excluído (não é último admin ativo)
-    /// </summary>
-    public class UsuarioPodeExcluirConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is Usuario usuario)
-            {
-                // Se não é admin ou não está ativo, pode excluir
-                if (usuario.Tipo != TipoUsuario.Administrador || !usuario.Ativo)
-                    return true;
-
-                // Verificar se há outros admins ativos
-                // Isso seria feito via service, mas aqui fazemos uma verificação simples
-                // O service fará a validação real no comando
-                return true; // O botão fica habilitado, mas o service bloqueará se necessário
-            }
-            return true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

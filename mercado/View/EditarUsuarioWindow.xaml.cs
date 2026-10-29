@@ -34,6 +34,14 @@ namespace mercado.View
             };
 
             DataContext = _usuarioClone;
+
+            // Na edição do próprio usuário, tipo e status ficam bloqueados.
+            if (usuario.Id == usuarioLogadoId)
+            {
+                cmbTipo.IsEnabled = false;
+                chkAtivo.IsEnabled = false;
+                borderAvisoProprioUsuario.Visibility = Visibility.Visible;
+            }
         }
 
         private void btnSalvar_Click(object sender, RoutedEventArgs e)
