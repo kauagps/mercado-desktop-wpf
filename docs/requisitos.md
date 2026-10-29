@@ -118,7 +118,7 @@
 - **BR-02**: Admin notificado sobre produtos com validade próxima.
 - **BR-03**: Taxa da maquininha calculada e aplicada em compras.
 - **BR-04**: Caixa aberto/fechado diariamente.
-- **BR-05**: Pelo menos 1 administrador obrigatório no sistema.
+- **BR-05**: Deve existir pelo menos 1 administrador ativo no sistema. O usuário logado não pode inativar, rebaixar ou excluir a própria conta.
 
 ---
 
@@ -550,6 +550,7 @@
 - Critérios de Aceite:
   - [CA-1] Os dados mostrados em cada registro devem ser: Nome, e status.
   - [CA-2] Registros selecionáveis para executar função desejada.
+  - [CA-3] As ações de inativar e excluir devem ficar desabilitadas para o próprio usuário logado e para o último administrador ativo, exibindo o motivo.
   - Prioridade: P1 | Esforço: 1 SP
 
 **USU003 - Adicionar usuário**
@@ -564,6 +565,7 @@
 - Critérios de Aceite:
   - [CA-1] Os campos atualizáveis são: Nome, Tipo, Senha.
   - [CA-2] Confirmação de alteração antes de salvar.
+  - [CA-3] O usuário logado não pode inativar nem rebaixar a própria conta; Tipo e Status ficam bloqueados na edição do próprio usuário.
   - Prioridade: P2 | Esforço: 1 SP
 
 **USU005 - Excluir usuário**
@@ -571,6 +573,7 @@
 - Critérios de Aceite:
   - [CA-1] Deve aparecer uma caixa de diálogo se certificando se realmente deseja realizar a exclusão do usuário.
   - [CA-2] O sistema nunca deve permitir excluir todos os usuários administradores.
+  - [CA-3] O usuário logado não pode excluir a própria conta.
   - Prioridade: P2 | Esforço: 1 SP
 
 ---
