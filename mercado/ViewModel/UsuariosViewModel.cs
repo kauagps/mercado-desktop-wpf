@@ -158,10 +158,20 @@ namespace mercado.ViewModel
                 {
                     try
                     {
-                        usuarioSelecionado.Ativo = !usuarioSelecionado.Ativo;
-                        _usuarioService.AtualizarUsuario(usuarioSelecionado);
+                        // Não altera o objeto exibido na lista antes da validação.
+                        var atualizado = new Usuario
+                        {
+                            Id = usuarioSelecionado.Id,
+                            Nome = usuarioSelecionado.Nome,
+                            Tipo = usuarioSelecionado.Tipo,
+                            SenhaHash = usuarioSelecionado.SenhaHash,
+                            Ativo = !usuarioSelecionado.Ativo,
+                            DeveTrocarSenha = usuarioSelecionado.DeveTrocarSenha
+                        };
+
+                        _usuarioService.AtualizarUsuario(atualizado);
                         CarregarUsuarios();
-                        MessageBox.Show($"Usuário {usuarioSelecionado.Nome} {(usuarioSelecionado.Ativo ? "ativado" : "inativado")} com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show($"Usuário {atualizado.Nome} {(atualizado.Ativo ? "ativado" : "inativado")} com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     catch (InvalidOperationException ex)
                     {
@@ -183,7 +193,7 @@ namespace mercado.ViewModel
             if (obj is Usuario usuarioSelecionado)
             {
                 // Verificar se pode excluir (BR-05)
-                if (!_usuarioService.PodeExcluir(usuarioSelecionado))
+                if (!_usuarioService.PodeExcluir(usuarioSelecionado.Id))
                 {
                     MessageBox.Show("Não é possível excluir o último administrador ativo do sistema.", "Ação Bloqueada", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;

@@ -9,16 +9,10 @@ namespace mercado.Service
 {
     public class UsuarioService
     {
-        private readonly MercadoContext _context;
-
-        public UsuarioService()
-        {
-            _context = new MercadoContext();
-        }
-
         public List<Usuario> ListarTodos()
         {
-            return _context.Usuarios.OrderBy(u => u.Nome).ToList();
+            using var context = new MercadoContext();
+            return context.Usuarios.OrderBy(u => u.Nome).ToList();
         }
 
         public Usuario? BuscarPorNome(string nome)
@@ -26,20 +20,28 @@ namespace mercado.Service
             if (string.IsNullOrWhiteSpace(nome))
                 return null;
 
-            return _context.Usuarios.FirstOrDefault(u => u.Nome == nome);
+            using var context = new MercadoContext();
+            return context.Usuarios.FirstOrDefault(u => u.Nome == nome);
         }
 
         public Usuario? BuscarPorId(int id)
         {
-            return _context.Usuarios.Find(id);
+            using var context = new MercadoContext();
+            return context.Usuarios.Find(id);
         }
 
         public bool NomeJaExiste(string nome, int idUsuarioAtual = 0)
         {
+            using var context = new MercadoContext();
+            return NomeJaExiste(context, nome, idUsuarioAtual);
+        }
+
+        private static bool NomeJaExiste(MercadoContext context, string nome, int idUsuarioAtual = 0)
+        {
             if (string.IsNullOrWhiteSpace(nome))
                 return false;
 
-            return _context.Usuarios.Any(u => u.Nome == nome && u.Id != idUsuarioAtual);
+            return context.Usuarios.Any(u => u.Nome == nome && u.Id != idUsuarioAtual);
         }
 
         public void AdicionarUsuario(Usuario usuario)
@@ -50,78 +52,102 @@ namespace mercado.Service
             if (string.IsNullOrWhiteSpace(usuario.SenhaHash))
                 throw new ArgumentException("Senha é obrigatória.");
 
-            if (NomeJaExiste(usuario.Nome))
+            using var context = new MercadoContext();
+
+            if (NomeJaExiste(context, usuario.Nome))
                 throw new InvalidOperationException("Já existe um usuário com este nome.");
 
             // Hash da senha se ainda não estiver hasheada
-            if (!EhHash(usuario.SenhaHash))
+            string senhaHash = usuario.SenhaHash;
+            if (!EhHash(senhaHash))
             {
-                ValidarPoliticaSenha(usuario.SenhaHash);
-                usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash);
+                ValidarPoliticaSenha(senhaHash);
+                senhaHash = BCrypt.Net.BCrypt.HashPassword(senhaHash);
             }
 
+            usuario.SenhaHash = senhaHash;
             usuario.DataCriacao = DateTime.Now;
-            _context.Usuarios.Add(usuario);
-            _context.SaveChanges();
+
+            context.Usuarios.Add(usuario);
+            context.SaveChanges();
         }
 
-        public void AtualizarUsuario(Usuario usuario)
+        public void AtualizarUsuario(Usuario usuario, int? usuarioLogadoId = null)
         {
-            var usuarioExistente = _context.Usuarios.Find(usuario.Id);
+            using var context = new MercadoContext();
+
+            var usuarioExistente = context.Usuarios.Find(usuario.Id);
             if (usuarioExistente == null)
                 throw new InvalidOperationException("Usuário não encontrado.");
 
             if (string.IsNullOrWhiteSpace(usuario.Nome))
                 throw new ArgumentException("Nome é obrigatório.");
 
-            if (NomeJaExiste(usuario.Nome, usuario.Id))
+            if (NomeJaExiste(context, usuario.Nome, usuario.Id))
                 throw new InvalidOperationException("Já existe outro usuário com este nome.");
 
-            // BR-05: não permitir inativar ou rebaixar o último administrador ativo
-            ValidarPeloMenosUmAdminAtivo(usuarioExistente, usuario.Tipo, usuario.Ativo);
+            // Impede que o usuário logado inative ou rebaixe a si mesmo
+            ValidarAlteracaoDoProprioUsuario(usuarioExistente, usuario, usuarioLogadoId);
 
-            // Se senha foi alterada (não está vazia e não é o hash atual), hashear nova senha
+            // BR-05: não permitir inativar ou rebaixar o último administrador ativo
+            ValidarPeloMenosUmAdminAtivo(context, usuarioExistente, usuario.Tipo, usuario.Ativo);
+
+            // Se senha foi alterada (não está vazia e não é o hash atual), hashear nova senha.
+            // O objeto recebido não é mutado: o hash é calculado localmente.
+            string senhaHash = usuarioExistente.SenhaHash;
             if (!string.IsNullOrWhiteSpace(usuario.SenhaHash) && usuario.SenhaHash != usuarioExistente.SenhaHash)
             {
-                if (!EhHash(usuario.SenhaHash))
+                senhaHash = usuario.SenhaHash;
+                if (!EhHash(senhaHash))
                 {
-                    ValidarPoliticaSenha(usuario.SenhaHash);
-                    usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash);
+                    ValidarPoliticaSenha(senhaHash);
+                    senhaHash = BCrypt.Net.BCrypt.HashPassword(senhaHash);
                 }
-            }
-            else
-            {
-                // Manter hash original se senha não foi alterada
-                usuario.SenhaHash = usuarioExistente.SenhaHash;
             }
 
             usuarioExistente.Nome = usuario.Nome;
             usuarioExistente.Tipo = usuario.Tipo;
-            usuarioExistente.SenhaHash = usuario.SenhaHash;
+            usuarioExistente.SenhaHash = senhaHash;
             usuarioExistente.Ativo = usuario.Ativo;
 
-            _context.Usuarios.Update(usuarioExistente);
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
-        public void ExcluirUsuario(Usuario usuario)
+        public void ExcluirUsuario(Usuario usuario, int? usuarioLogadoId = null)
         {
-            var usuarioExistente = _context.Usuarios.Find(usuario.Id);
+            using var context = new MercadoContext();
+
+            var usuarioExistente = context.Usuarios.Find(usuario.Id);
             if (usuarioExistente == null)
                 throw new InvalidOperationException("Usuário não encontrado.");
 
-            // BR-05: não permitir excluir o último administrador ativo
-            ValidarPeloMenosUmAdminAtivo(usuarioExistente, usuarioExistente.Tipo, false);
+            if (usuarioLogadoId.HasValue && usuarioExistente.Id == usuarioLogadoId.Value)
+                throw new InvalidOperationException("Você não pode excluir o próprio usuário logado.");
 
-            _context.Usuarios.Remove(usuarioExistente);
-            _context.SaveChanges();
+            // BR-05: não permitir excluir o último administrador ativo
+            ValidarPeloMenosUmAdminAtivo(context, usuarioExistente, usuarioExistente.Tipo, false);
+
+            context.Usuarios.Remove(usuarioExistente);
+            context.SaveChanges();
+        }
+
+        private static void ValidarAlteracaoDoProprioUsuario(Usuario usuarioExistente, Usuario usuario, int? usuarioLogadoId)
+        {
+            if (!usuarioLogadoId.HasValue || usuarioExistente.Id != usuarioLogadoId.Value)
+                return;
+
+            if (!usuario.Ativo)
+                throw new InvalidOperationException("Você não pode inativar o próprio usuário logado.");
+
+            if (usuarioExistente.Tipo == TipoUsuario.Administrador && usuario.Tipo != TipoUsuario.Administrador)
+                throw new InvalidOperationException("Você não pode remover o próprio acesso de administrador.");
         }
 
         /// <summary>
         /// BR-05: garante que sempre exista pelo menos um administrador ativo.
         /// A validação considera a situação atual no banco e o novo estado desejado.
         /// </summary>
-        private void ValidarPeloMenosUmAdminAtivo(Usuario usuarioExistente, TipoUsuario novoTipo, bool novoAtivo)
+        private static void ValidarPeloMenosUmAdminAtivo(MercadoContext context, Usuario usuarioExistente, TipoUsuario novoTipo, bool novoAtivo)
         {
             // A restrição só se aplica quando o usuário era administrador ativo
             // e deixará de ser (inativação, rebaixamento ou exclusão).
@@ -132,7 +158,7 @@ namespace mercado.Service
             if (continuaraAdminAtivo)
                 return;
 
-            bool existeOutroAdminAtivo = _context.Usuarios.Any(u =>
+            bool existeOutroAdminAtivo = context.Usuarios.Any(u =>
                 u.Id != usuarioExistente.Id &&
                 u.Tipo == TipoUsuario.Administrador &&
                 u.Ativo);
@@ -154,7 +180,9 @@ namespace mercado.Service
 
             ValidarPoliticaSenha(novaSenha);
 
-            var usuario = _context.Usuarios.Find(usuarioId);
+            using var context = new MercadoContext();
+
+            var usuario = context.Usuarios.Find(usuarioId);
             if (usuario == null)
                 throw new InvalidOperationException("Usuário não encontrado.");
 
@@ -163,7 +191,7 @@ namespace mercado.Service
 
             usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(novaSenha);
             usuario.DeveTrocarSenha = false;
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         /// <summary>
@@ -188,7 +216,8 @@ namespace mercado.Service
             if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(senha))
                 return null;
 
-            var usuario = _context.Usuarios.FirstOrDefault(u => u.Nome == nome && u.Ativo);
+            using var context = new MercadoContext();
+            var usuario = context.Usuarios.FirstOrDefault(u => u.Nome == nome && u.Ativo);
             if (usuario == null)
                 return null;
 
@@ -198,20 +227,27 @@ namespace mercado.Service
 
         public int ContarAdminsAtivos()
         {
-            return _context.Usuarios.Count(u => u.Tipo == TipoUsuario.Administrador && u.Ativo);
+            using var context = new MercadoContext();
+            return context.Usuarios.Count(u => u.Tipo == TipoUsuario.Administrador && u.Ativo);
         }
 
         public bool ExisteOutroAdminAtivo(int usuarioId)
         {
-            return _context.Usuarios.Any(u => u.Tipo == TipoUsuario.Administrador && u.Ativo && u.Id != usuarioId);
+            using var context = new MercadoContext();
+            return context.Usuarios.Any(u => u.Tipo == TipoUsuario.Administrador && u.Ativo && u.Id != usuarioId);
         }
 
-        public bool PodeExcluir(Usuario usuario)
+        public bool PodeExcluir(int usuarioId)
         {
+            using var context = new MercadoContext();
+            var usuario = context.Usuarios.Find(usuarioId);
+            if (usuario == null)
+                return false;
+
             if (usuario.Tipo != TipoUsuario.Administrador || !usuario.Ativo)
                 return true;
 
-            return ContarAdminsAtivos() > 1;
+            return context.Usuarios.Count(u => u.Tipo == TipoUsuario.Administrador && u.Ativo) > 1;
         }
     }
 }

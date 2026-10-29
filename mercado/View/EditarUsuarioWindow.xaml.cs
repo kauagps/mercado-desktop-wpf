@@ -8,7 +8,6 @@ namespace mercado.View
 {
     public partial class EditarUsuarioWindow : Window
     {
-        private Usuario _usuarioOriginal;
         private Usuario _usuarioClone;
         private UsuarioService _usuarioService;
         private bool _alteracaoSalva;
@@ -18,7 +17,6 @@ namespace mercado.View
             InitializeComponent();
 
             _usuarioService = new UsuarioService();
-            _usuarioOriginal = usuario;
 
             _usuarioClone = new Usuario
             {
@@ -27,6 +25,7 @@ namespace mercado.View
                 Tipo = usuario.Tipo,
                 SenhaHash = usuario.SenhaHash, // Hash original (será mantido se não alterar senha)
                 Ativo = usuario.Ativo,
+                DeveTrocarSenha = usuario.DeveTrocarSenha,
                 DataCriacao = usuario.DataCriacao
             };
 
@@ -101,13 +100,10 @@ namespace mercado.View
 
             try
             {
-                // Atualizar usuário original com dados do clone
-                _usuarioOriginal.Nome = _usuarioClone.Nome;
-                _usuarioOriginal.Tipo = _usuarioClone.Tipo;
-                _usuarioOriginal.SenhaHash = _usuarioClone.SenhaHash; // Será hasheada no service se alterada
-                _usuarioOriginal.Ativo = _usuarioClone.Ativo;
-
-                _usuarioService.AtualizarUsuario(_usuarioOriginal);
+                // Envia o clone para o service. A entidade exibida na lista não é
+                // alterada antes da validação, evitando que uma alteração rejeitada
+                // permaneça no objeto/contexto da tela.
+                _usuarioService.AtualizarUsuario(_usuarioClone);
 
                 _alteracaoSalva = true;
                 MessageBox.Show("Usuário atualizado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
