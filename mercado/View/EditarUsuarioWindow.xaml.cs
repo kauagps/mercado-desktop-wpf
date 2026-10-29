@@ -11,6 +11,7 @@ namespace mercado.View
         private Usuario _usuarioOriginal;
         private Usuario _usuarioClone;
         private UsuarioService _usuarioService;
+        private bool _alteracaoSalva;
 
         public EditarUsuarioWindow(Usuario usuario)
         {
@@ -86,6 +87,18 @@ namespace mercado.View
                 return;
             }
 
+            // USU004 CA-2: confirmar antes de persistir a alteração
+            var confirmacao = MessageBox.Show(
+                $"Deseja salvar as alterações do usuário {_usuarioClone.Nome}?",
+                "Confirmar Alteração",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (confirmacao != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
             try
             {
                 // Atualizar usuário original com dados do clone
@@ -96,6 +109,7 @@ namespace mercado.View
 
                 _usuarioService.AtualizarUsuario(_usuarioOriginal);
 
+                _alteracaoSalva = true;
                 MessageBox.Show("Usuário atualizado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
             }
@@ -112,6 +126,14 @@ namespace mercado.View
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            // Não pedir confirmação de cancelamento quando a janela foi fechada
+            // porque a alteração já foi salva com sucesso.
+            if (_alteracaoSalva)
+            {
+                e.Cancel = false;
+                return;
+            }
+
             MessageBoxResult resposta = MessageBox.Show(
                 "Tem certeza que deseja cancelar a operação e fechar a tela?",
                 "Confirmação de Cancelamento",
