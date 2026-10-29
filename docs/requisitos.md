@@ -541,6 +541,8 @@
 - Critérios de Aceite:
   - [CA-1] Para efetuar login, deve ser informado usuário e senha.
   - [CA-2] Funcionalidade de logout disponível.
+  - [CA-3] No primeiro acesso do usuário administrador padrão, deve ser exigida a troca da senha antes de liberar o sistema.
+  - [CA-4] A senha deve atender à política mínima: pelo menos 8 caracteres, com pelo menos uma letra e um número.
   - Prioridade: P0 | Esforço: 2 SP
 
 **USU002 - Listar usuários**

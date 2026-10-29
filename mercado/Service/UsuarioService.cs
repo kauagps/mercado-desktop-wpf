@@ -54,8 +54,9 @@ namespace mercado.Service
                 throw new InvalidOperationException("Já existe um usuário com este nome.");
 
             // Hash da senha se ainda não estiver hasheada
-            if (!usuario.SenhaHash.StartsWith("$2a$") && !usuario.SenhaHash.StartsWith("$2b$") && !usuario.SenhaHash.StartsWith("$2y$"))
+            if (!EhHash(usuario.SenhaHash))
             {
+                ValidarPoliticaSenha(usuario.SenhaHash);
                 usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash);
             }
 
@@ -82,8 +83,9 @@ namespace mercado.Service
             // Se senha foi alterada (não está vazia e não é o hash atual), hashear nova senha
             if (!string.IsNullOrWhiteSpace(usuario.SenhaHash) && usuario.SenhaHash != usuarioExistente.SenhaHash)
             {
-                if (!usuario.SenhaHash.StartsWith("$2a$") && !usuario.SenhaHash.StartsWith("$2b$") && !usuario.SenhaHash.StartsWith("$2y$"))
+                if (!EhHash(usuario.SenhaHash))
                 {
+                    ValidarPoliticaSenha(usuario.SenhaHash);
                     usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash);
                 }
             }
@@ -140,6 +142,45 @@ namespace mercado.Service
                 throw new InvalidOperationException(
                     "Não é possível inativar, rebaixar ou excluir o último administrador ativo do sistema.");
             }
+        }
+
+        /// <summary>
+        /// Altera a senha do usuário e remove a exigência de troca no próximo login.
+        /// </summary>
+        public void AlterarSenha(int usuarioId, string novaSenha)
+        {
+            if (string.IsNullOrWhiteSpace(novaSenha))
+                throw new ArgumentException("A nova senha é obrigatória.");
+
+            ValidarPoliticaSenha(novaSenha);
+
+            var usuario = _context.Usuarios.Find(usuarioId);
+            if (usuario == null)
+                throw new InvalidOperationException("Usuário não encontrado.");
+
+            if (BCrypt.Net.BCrypt.Verify(novaSenha, usuario.SenhaHash))
+                throw new InvalidOperationException("A nova senha deve ser diferente da senha atual.");
+
+            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(novaSenha);
+            usuario.DeveTrocarSenha = false;
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Política mínima de senha: 8 caracteres, com pelo menos uma letra e um número.
+        /// </summary>
+        public static void ValidarPoliticaSenha(string senha)
+        {
+            if (string.IsNullOrWhiteSpace(senha) || senha.Length < 8)
+                throw new ArgumentException("A senha deve ter pelo menos 8 caracteres.");
+
+            if (!senha.Any(char.IsLetter) || !senha.Any(char.IsDigit))
+                throw new ArgumentException("A senha deve conter pelo menos uma letra e um número.");
+        }
+
+        private static bool EhHash(string valor)
+        {
+            return valor.StartsWith("$2a$") || valor.StartsWith("$2b$") || valor.StartsWith("$2y$");
         }
 
         public Usuario? Autenticar(string nome, string senha)

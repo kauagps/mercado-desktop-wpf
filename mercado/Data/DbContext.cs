@@ -35,6 +35,7 @@ namespace mercado.Data
                     Tipo = TipoUsuario.Administrador,
                     SenhaHash = adminHash,
                     Ativo = true,
+                    DeveTrocarSenha = true,
                     DataCriacao = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 }
             );

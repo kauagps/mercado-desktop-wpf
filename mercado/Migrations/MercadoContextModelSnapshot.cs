@@ -143,6 +143,9 @@ namespace mercado.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("DeveTrocarSenha")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -166,6 +169,7 @@ namespace mercado.Migrations
                             Id = 1,
                             Ativo = true,
                             DataCriacao = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DeveTrocarSenha = true,
                             Nome = "admin",
                             SenhaHash = "$2a$11$7jk9L7TvgE2tvoVIvZdWLebEiZLLlE2ieDyB1NzqbZ5kFfIOW4gcG",
                             Tipo = 1

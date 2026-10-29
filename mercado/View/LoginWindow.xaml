@@ -74,11 +74,11 @@
         </StackPanel>
 
         <!-- Rodapé -->
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,20,0,0" Orientation="Horizontal">
-            <TextBlock Text="Usuário padrão: " FontSize="12" Foreground="Gray" VerticalAlignment="Center"/>
-            <TextBlock Text="admin" FontSize="12" FontWeight="Bold" Foreground="Gray" VerticalAlignment="Center"/>
-            <TextBlock Text="  |  Senha: " FontSize="12" Foreground="Gray" VerticalAlignment="Center"/>
-            <TextBlock Text="admin123" FontSize="12" FontWeight="Bold" Foreground="Gray" VerticalAlignment="Center"/>
-        </StackPanel>
+        <TextBlock Grid.Row="2"
+                   Text="Sistema Mercado"
+                   FontSize="12"
+                   Foreground="Gray"
+                   HorizontalAlignment="Center"
+                   Margin="0,20,0,0"/>
     </Grid>
 </Window>

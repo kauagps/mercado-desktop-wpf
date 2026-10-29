@@ -22,6 +22,12 @@ namespace mercado.Model
 
         public bool Ativo { get; set; } = true;
 
+        /// <summary>
+        /// Indica que o usuário deve trocar a senha no próximo login.
+        /// Usado para o administrador padrão criado pelo seed.
+        /// </summary>
+        public bool DeveTrocarSenha { get; set; }
+
         public DateTime DataCriacao { get; set; } = DateTime.Now;
     }
 

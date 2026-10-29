@@ -51,6 +51,24 @@ namespace mercado.View
 
             if (usuarioLogado != null)
             {
+                // Primeiro acesso (ex.: admin padrão): exige a troca da senha
+                // antes de liberar o sistema.
+                if (usuarioLogado.DeveTrocarSenha)
+                {
+                    var trocaSenha = new TrocarSenhaWindow(usuarioLogado)
+                    {
+                        Owner = this
+                    };
+
+                    if (trocaSenha.ShowDialog() != true)
+                    {
+                        MostrarErro("É necessário alterar a senha para continuar.");
+                        txtSenha.Clear();
+                        txtSenha.Focus();
+                        return;
+                    }
+                }
+
                 // Login bem-sucedido - abrir MainWindow
                 var mainWindow = new MainWindow(usuarioLogado);
                 Application.Current.MainWindow = mainWindow;
