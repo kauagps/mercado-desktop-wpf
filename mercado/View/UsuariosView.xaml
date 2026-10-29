@@ -91,7 +91,6 @@
                 <Grid Grid.Row="3" HorizontalAlignment="Stretch">
                     <Button Content="Adicionar Usuário" Width="180" 
                             HorizontalAlignment="Right"
-                            Command="{Binding AdicionarUsuarioCommand}"
                             Click="btnAdicionar_Click"></Button>
                 </Grid>
             </Grid>

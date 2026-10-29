@@ -29,6 +29,12 @@ namespace mercado.ViewModel
             set { _novoUsuario = value; onPropertyChanged(nameof(NovoUsuario)); }
         }
 
+        /// <summary>
+        /// Confirmação da senha digitada no cadastro. Preenchida pelo code-behind,
+        /// pois PasswordBox não suporta binding.
+        /// </summary>
+        public string ConfirmacaoSenha { get; set; } = string.Empty;
+
         // --- Variaveis Buscar --------------
         private string _textoBusca = string.Empty;
         public string TextoBusca
@@ -220,17 +226,28 @@ namespace mercado.ViewModel
             UsuariosLista = new ObservableCollection<Usuario>(itensPaginados);
         }
 
-        private void SalvarNovoUsuario()
+        public bool SalvarNovoUsuario()
         {
             if (string.IsNullOrWhiteSpace(NovoUsuario.Nome) ||
-                string.IsNullOrWhiteSpace(NovoUsuario.SenhaHash))
+                string.IsNullOrWhiteSpace(NovoUsuario.SenhaHash) ||
+                string.IsNullOrWhiteSpace(ConfirmacaoSenha))
             {
                 MessageBox.Show(
-                    "Por favor, preencha Nome e Senha corretamente.",
+                    "Por favor, preencha Nome, Senha e Confirmação de Senha.",
                     "Campos Obrigatórios",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                return;
+                return false;
+            }
+
+            if (NovoUsuario.SenhaHash != ConfirmacaoSenha)
+            {
+                MessageBox.Show(
+                    "As senhas não conferem. Digite a mesma senha nos dois campos.",
+                    "Senhas Diferentes",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return false;
             }
 
             if (_usuarioService.NomeJaExiste(NovoUsuario.Nome))
@@ -240,19 +257,22 @@ namespace mercado.ViewModel
                     "Nome Duplicado",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                return;
+                return false;
             }
 
             try
             {
                 _usuarioService.AdicionarUsuario(NovoUsuario);
                 NovoUsuario = new Usuario();
+                ConfirmacaoSenha = string.Empty;
                 MessageBox.Show("Usuário adicionado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 CarregarUsuarios();
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao adicionar usuário: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
         }
 
