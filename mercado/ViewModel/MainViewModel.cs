@@ -43,7 +43,7 @@ namespace mercado.ViewModel
 
             EstoqueVM = new EstoqueViewModel();
             PdvVM = new PdvViewModel();
-            UsuariosVM = new UsuariosViewModel();
+            UsuariosVM = new UsuariosViewModel(usuarioLogado.Id);
 
             NavEstoqueCommand = new RelayCommand(_ => NavegarParaEstoque());
             NavPdvCommand = new RelayCommand(_ => NavegarParaPdv());

@@ -14,6 +14,7 @@ namespace mercado.ViewModel
     public class UsuariosViewModel : INotifyPropertyChanged
     {
         private readonly UsuarioService _usuarioService;
+        private readonly int _usuarioLogadoId;
         private ObservableCollection<Usuario> _usuariosLista = new ObservableCollection<Usuario>();
         private Usuario _novoUsuario = new Usuario();
 
@@ -99,9 +100,10 @@ namespace mercado.ViewModel
         public ICommand InativarUsuarioCommand { get; set; }
         public ICommand ExcluirUsuarioCommand { get; set; }
 
-        public UsuariosViewModel()
+        public UsuariosViewModel(int usuarioLogadoId)
         {
             _usuarioService = new UsuarioService();
+            _usuarioLogadoId = usuarioLogadoId;
             NovoUsuario = new Usuario();
             UsuariosLista = new ObservableCollection<Usuario>();
 
@@ -137,7 +139,7 @@ namespace mercado.ViewModel
         {
             if (obj is Usuario usuarioSelecionado)
             {
-                var janelaEdicao = new View.EditarUsuarioWindow(usuarioSelecionado);
+                var janelaEdicao = new View.EditarUsuarioWindow(usuarioSelecionado, _usuarioLogadoId);
                 janelaEdicao.ShowDialog();
                 CarregarUsuarios();
             }
@@ -147,6 +149,16 @@ namespace mercado.ViewModel
         {
             if (obj is Usuario usuarioSelecionado)
             {
+                if (usuarioSelecionado.Id == _usuarioLogadoId && usuarioSelecionado.Ativo)
+                {
+                    MessageBox.Show(
+                        "Você não pode inativar o próprio usuário logado.",
+                        "Ação Bloqueada",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
                 var acao = usuarioSelecionado.Ativo ? "inativar" : "ativar";
                 var resposta = MessageBox.Show(
                     $"Tem certeza que deseja {acao} o usuário: {usuarioSelecionado.Nome}?",
@@ -169,7 +181,7 @@ namespace mercado.ViewModel
                             DeveTrocarSenha = usuarioSelecionado.DeveTrocarSenha
                         };
 
-                        _usuarioService.AtualizarUsuario(atualizado);
+                        _usuarioService.AtualizarUsuario(atualizado, _usuarioLogadoId);
                         CarregarUsuarios();
                         MessageBox.Show($"Usuário {atualizado.Nome} {(atualizado.Ativo ? "ativado" : "inativado")} com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -192,6 +204,16 @@ namespace mercado.ViewModel
         {
             if (obj is Usuario usuarioSelecionado)
             {
+                if (usuarioSelecionado.Id == _usuarioLogadoId)
+                {
+                    MessageBox.Show(
+                        "Você não pode excluir o próprio usuário logado.",
+                        "Ação Bloqueada",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
                 // Verificar se pode excluir (BR-05)
                 if (!_usuarioService.PodeExcluir(usuarioSelecionado.Id))
                 {
@@ -209,7 +231,7 @@ namespace mercado.ViewModel
                 {
                     try
                     {
-                        _usuarioService.ExcluirUsuario(usuarioSelecionado);
+                        _usuarioService.ExcluirUsuario(usuarioSelecionado, _usuarioLogadoId);
                         CarregarUsuarios();
                         MessageBox.Show($"Usuário {usuarioSelecionado.Nome} excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                     }

@@ -8,15 +8,19 @@ namespace mercado.View
 {
     public partial class EditarUsuarioWindow : Window
     {
+        private readonly Usuario _usuarioOriginal;
+        private readonly int _usuarioLogadoId;
         private Usuario _usuarioClone;
         private UsuarioService _usuarioService;
         private bool _alteracaoSalva;
 
-        public EditarUsuarioWindow(Usuario usuario)
+        public EditarUsuarioWindow(Usuario usuario, int usuarioLogadoId)
         {
             InitializeComponent();
 
             _usuarioService = new UsuarioService();
+            _usuarioOriginal = usuario;
+            _usuarioLogadoId = usuarioLogadoId;
 
             _usuarioClone = new Usuario
             {
@@ -86,6 +90,30 @@ namespace mercado.View
                 return;
             }
 
+            // O usuário logado não pode inativar ou rebaixar a própria conta
+            if (_usuarioClone.Id == _usuarioLogadoId)
+            {
+                if (_usuarioOriginal.Ativo && !_usuarioClone.Ativo)
+                {
+                    MessageBox.Show(
+                        "Você não pode inativar o próprio usuário logado.",
+                        "Ação Bloqueada",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (_usuarioOriginal.Tipo == TipoUsuario.Administrador && _usuarioClone.Tipo != TipoUsuario.Administrador)
+                {
+                    MessageBox.Show(
+                        "Você não pode remover o próprio acesso de administrador.",
+                        "Ação Bloqueada",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+            }
+
             // USU004 CA-2: confirmar antes de persistir a alteração
             var confirmacao = MessageBox.Show(
                 $"Deseja salvar as alterações do usuário {_usuarioClone.Nome}?",
@@ -103,7 +131,7 @@ namespace mercado.View
                 // Envia o clone para o service. A entidade exibida na lista não é
                 // alterada antes da validação, evitando que uma alteração rejeitada
                 // permaneça no objeto/contexto da tela.
-                _usuarioService.AtualizarUsuario(_usuarioClone);
+                _usuarioService.AtualizarUsuario(_usuarioClone, _usuarioLogadoId);
 
                 _alteracaoSalva = true;
                 MessageBox.Show("Usuário atualizado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
